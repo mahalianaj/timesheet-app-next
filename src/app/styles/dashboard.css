@@ -1,0 +1,25 @@
+.button {
+  border-radius: 8px;
+  box-shadow: 0 .5px 8px 1px rgba(0, 72, 144, 0.185) ;
+  padding: 0.75rem;
+  text-align: center;
+  width: 25%;
+  margin-top: 20px;
+  color: rgb(10, 81, 119);
+}
+
+.button:hover {
+  background-color: #008bbabb;
+  color: white;
+  transition-duration: 500ms;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+  gap: 30px;
+
+}
