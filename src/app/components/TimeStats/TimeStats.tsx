@@ -5,6 +5,10 @@ import { FaClock, FaHourglassHalf, FaRegCalendarCheck } from "react-icons/fa";
 export default function TimeStats({ users }: { users?: User[] }) {
   const [offDays, setOffDays] = useState<string[]>([]);
   const [entries, setEntries] = useState<any[]>([]);
+  const [hours, setHours] = useState<string>('');
+  const [hoursConsumed, setHoursConsumed] = useState<string>('');
+  const [hoursLeft, setHoursLeft] = useState<string>('');
+  const user = users?.[0];
 
   useEffect(() => {
     async function fetchData() {
@@ -30,11 +34,60 @@ export default function TimeStats({ users }: { users?: User[] }) {
     fetchData();
   }, []);
 
+useEffect(() => {
+  if (!user) return;
+  let totalHours = totalHoursToWork(startDate, endDate);
+  let totalHoursConsumed  = entries.reduce((sum, row) => sum + Number(row.hours), 0);
+  let totalHoursLeft = totalHours - totalHoursConsumed; 
+  const string1= totalHours.toString();
+  const string2 = totalHoursConsumed.toString();
+  const string3 = totalHoursLeft.toString();
+  setHours(string1);
+  setHoursConsumed(string2);
+  setHoursLeft(string3);
+
+   if (
+    totalHours.toString() === hours &&
+    totalHoursConsumed.toString() === hoursConsumed &&
+    totalHoursLeft.toString() === hoursLeft
+  ) {
+    return
+  };
+
+  const updatedUser = {
+    Id: user.Id,
+    total_hours: totalHours.toString(),
+    hours_consumed: totalHoursConsumed.toString(),
+    hours_left: totalHoursLeft.toString(),
+  };
+
+  async function updateUserProfile() {
+    try {
+      const res = await fetch('/api/users', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedUser),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        console.error('Failed to update user profile:', error);
+      }
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+    }
+  }
+  console.log("Updating user profile for:", user);
+
+  updateUserProfile();
+}, [entries, offDays, user]);
+
+
   if (!users || users.length === 0) {
     return <div>Loading user info...</div>
   }
-
-  const user: User = users[0];
   const startDate = user.start_period;
   const endDate = user.end_period;
 
@@ -55,9 +108,7 @@ export default function TimeStats({ users }: { users?: User[] }) {
     return workingDays * averageWorkDay;
   }
 
-  const totalHours = totalHoursToWork(startDate, endDate);
-  const totalHoursConsumed = entries.reduce((sum, row) => sum + Number(row.hours), 0);
-  const totalHoursLeft = totalHours - totalHoursConsumed;
+ 
 
   return (
     <div className="flex flex-row gap-3">
@@ -69,7 +120,7 @@ export default function TimeStats({ users }: { users?: User[] }) {
             </div>
             <div>
             <label className="text-gray-500">Total Hours</label>
-            <div className="text-black text-3xl font-bold">{totalHours}</div>
+            <div className="text-black text-3xl font-bold">{hours}</div>
             </div>
         </div>
 
@@ -79,22 +130,22 @@ export default function TimeStats({ users }: { users?: User[] }) {
         {/* Hours Consumed */}
         <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-gray-200">
             <div className="bg-rose-50 p-3 rounded-full">
-            <FaClock className="text-blue-950 text-2xl" />
+            <FaClock className="text-cyan-950 text-2xl" />
             </div>
             <div>
             <label className="text-gray-500">Hours Consumed</label>
-            <div className="text-blue-950 text-3xl font-bold">{totalHoursConsumed}</div>
+            <div className="text-cyan-950 text-3xl font-bold">{hoursConsumed}</div>
             </div>
         </div>
 
         {/* Hours Left */}
         <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-gray-200">
             <div className="bg-rose-50 p-3 rounded-full">
-            <FaHourglassHalf className="text-blue-950 text-2xl" />
+            <FaHourglassHalf className="text-cyan-950 text-2xl" />
             </div>
             <div>
             <label className="text-gray-500">Hours Left</label>
-            <div className="text-black text-3xl font-bold">{totalHoursLeft}</div>
+            <div className="text-black text-3xl font-bold">{hoursLeft}</div>
             </div>
         </div>
 

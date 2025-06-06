@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from "react"
-import { AgGridReact } from 'ag-grid-react';
 import '../../styles/login.css'
 import '../../styles/table.css'
 

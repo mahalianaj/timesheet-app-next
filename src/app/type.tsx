@@ -1,5 +1,6 @@
 
 type User = {
+  Id: number;
   consultant: string;
   customer: string;
   contract_number: string;
@@ -10,9 +11,10 @@ type User = {
 };
 
 type Entry = {
+  Id: number;
   date: string;
   taskDescription: string;
   taskType: string;
   project: string;
-  hours: number;
+  hours: string;
 };

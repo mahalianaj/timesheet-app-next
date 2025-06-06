@@ -1,17 +1,20 @@
 'use client'
 // import { Metadata } from "next"
-import { Button } from "./components/Button/Button"
 
 import Login from "./components/Login"
-import SideBar, { SideBarItem } from './components/Global/SideBar'; 
-import { LiaBusinessTimeSolid } from "react-icons/lia";
-import MyForm from "./components/Form/Form";
+import Navigation from "./components/Global/NavBar";
 import UserBox from "./components/UserBox/UserBox";
 import TimeStats from "./components/TimeStats/TimeStats";
-import { useEffect, useState } from "react"
-import TimesheetTable from "./components/TimeSheetTable/TimesheetTable";
-import TanStackTable from "./components/TimeSheetTable/InteractiveTable";
-import Navigation from "./components/Global/NavBar";
+import TimesheetTableInter from "./components/TimeSheetTable/TimesheetTableInter";
+
+import { lazy, Suspense, useState, useEffect } from 'react';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 
 // export const metadata: Metadata = {
@@ -31,6 +34,17 @@ import Navigation from "./components/Global/NavBar";
 //   },
 // }
 
+const ReactQueryDevtoolsProduction = lazy(() =>
+  import('@tanstack/react-query-devtools/build/modern/production.js').then(
+    (d) => ({
+      default: d.ReactQueryDevtools,
+    }),
+  ),
+);
+
+const queryClient = new QueryClient();
+
+
 
 export default function App(){
   const [users, setUsers] = useState<User[]>([]);
@@ -47,52 +61,18 @@ export default function App(){
 
   return(
    <>
-      <Navigation/>
-      <div className="flex flex-row justify-evenly">
+      <Navigation title={""}/>
+      <div className="flex flex-row justify-evenly py-6 bg-stone-50">
         <UserBox users={users}/>
         <TimeStats users={users}/>
       </div>
+      <QueryClientProvider client={queryClient}>
+        <TimesheetTableInter/>
+        <Suspense fallback={null}>
+          <ReactQueryDevtoolsProduction />
+        </Suspense>
+    </QueryClientProvider>
    </>
   )
 }
 
-
-
-// export default function App(){
-//   const [users, setUsers] = useState<User[]>([]);
-    
-//         useEffect(() => {
-//             async function fetchEntries() {
-//               const res = await fetch('/api/users')
-//               const data = await res.json()
-//               console.log('Fetched users: ', data);
-//               setUsers(data.list);
-//             }
-//             fetchEntries();
-//         }, []);
-        
-//   return(
-//     <>
-//     <div className="flex h-full">
-//       {/* <SideBar>
-//         <SideBarItem icon={<LiaBusinessTimeSolid  />} text="Timesheet" />
-//       </SideBar> */}
-//       <div className="flex flex-col h-full w-full border-amber-600 border-solid">
-//         <Header></Header>
-//         <div className="flex flex-col h-full w-full px-4 ">
-//           <div className="flex flex-row h-full w-full justify-end align-bottom">
-
-//           <UserBox users={users}></UserBox>
-//           <TimeStats users={users}></TimeStats>
-//           </div>
-//            <div className="flex flex-row h-full w-full justify-between">
-//             <MyForm></MyForm> 
-//             <TimesheetTable/>
-//             {/* <TanStackTable/> */}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//     </>
-//   )
-// }
