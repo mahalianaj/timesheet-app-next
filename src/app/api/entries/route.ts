@@ -102,19 +102,36 @@ export async function DELETE(request: Request) {
 
 export async function PATCH(req: Request) {
   try {
-    const body = await req.json(); 
+    const body = await req.json();
 
-    const res = await fetch(`${process.env.API_URL}${process.env.USERS_TABLE_ID}/records`, {
+    if (!body.Id) {
+      return new Response(JSON.stringify({ error: 'Missing Id for PATCH' }), { status: 400 });
+    }
+
+    // 🔴 Exclure les champs non modifiables
+    const { Id, date, taskDescription, taskType, project, hours } = body;
+
+    const payload = {
+      Id, // requis pour PATCH
+      ...(date && { date }),
+      ...(taskDescription && { taskDescription }),
+      ...(taskType && { taskType }),
+      ...(project && { project }),
+      ...(hours && { hours }),
+    };
+
+    const res = await fetch(`${process.env.API_URL}${process.env.ENTRIES_TABLE_ID}/records`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'xc-token': process.env.API_TOKEN,
-      } as HeadersInit,
-      body: JSON.stringify(body), 
+        'xc-token': process.env.API_TOKEN!,
+      },
+      body: JSON.stringify(payload),
     });
 
     if (!res.ok) {
       const error = await res.json();
+      console.error('NocoDB PATCH error:', error);
       return new Response(JSON.stringify({ error }), { status: res.status });
     }
 
@@ -122,6 +139,42 @@ export async function PATCH(req: Request) {
     return new Response(JSON.stringify(data), { status: 200 });
 
   } catch (err: any) {
+    console.error('PATCH handler error:', err.message);
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }
+
+
+
+// export async function PATCH(req: Request) {
+//   try {
+//     const body = await req.json(); 
+//     const { Id, date, taskDescription, taskType, project, hours } = body;
+//     if (!body.Id) {
+//   return new Response(JSON.stringify({ error: 'Missing Id for PATCH' }), { status: 400 });
+// }
+
+//     const res = await fetch(`${process.env.API_URL}${process.env.ENTRIES_TABLE_ID}/records`, {
+//       method: 'PATCH',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'xc-token': process.env.API_TOKEN,
+//       } as HeadersInit,
+//       body: JSON.stringify({
+//         Id, date, taskDescription, taskType, project, hours
+//       }), 
+//     });
+
+//     if (!res.ok) {
+//       const error = await res.json();
+//       return new Response(JSON.stringify({ error }), { status: res.status });
+//     }
+
+//     const data = await res.json();
+//     return new Response(JSON.stringify(data), { status: 200 });
+
+//   } catch (err: any) {
+//     return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+//   }
+// }
+

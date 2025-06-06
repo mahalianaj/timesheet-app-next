@@ -166,19 +166,32 @@ export default function TimesheetTable(){
         muiEditTextFieldProps: ({ cell, row }) => ({
           select: true,
           required: true,
-        
           error: !!validationErrors?.[cell.id],
           helperText: validationErrors?.[cell.id],
-          //store edited entry in state to be saved later
+          onChange: (event) => {
+            const newValue = event.target.value;
+
+            setEditedEntries((prev) => ({
+              ...prev,
+              [row.id]: {
+                ...row.original,
+                [cell.column.id]: newValue, 
+              },
+            }));
+
+            if (validationErrors?.[cell.id]) {
+              setValidationErrors((prev) => ({
+                ...prev,
+                [cell.id]: undefined,
+              }));
+            }
+          },
           onBlur: (event) => {
-            const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
-              : undefined;
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: validationError,
-            });
-            setEditedEntries({ ...editedEntries, [row.id]: row.original });
+            const isValid = validateRequired(event.currentTarget.value);
+            setValidationErrors((prev) => ({
+              ...prev,
+              [cell.id]: isValid ? undefined : 'Required',
+            }));
           },
           children: [
             <MenuItem key="dev" value="Development">Development</MenuItem>,
@@ -364,7 +377,7 @@ function useCreateEntry() {
             headers: {
             'Content-Type': 'application/json',
             },
-            body: JSON.stringify({entry}),
+            body: JSON.stringify(entry),
         });
     },
     //client side optimistic update
@@ -406,22 +419,36 @@ function useUpdateEntries() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (entries: Entry[]) => {
+  const results = await Promise.all(
+    entries.map(async (entry) => {
+      const res = await fetch('/api/entries', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+       body: JSON.stringify({
+        Id: entry.Id,
+        date: entry.date,
+        taskDescription: entry.taskDescription,
+        taskType: entry.taskType,
+        project: entry.project,
+        hours: entry.hours,
+      }),
+      });
 
-        console.log('Updating entries:', entries);
-        const res = await fetch('/api/entries', {
-            method: 'PATCH',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({entries}),
-        });
+      const json = await res.json();
+      console.log('PATCH response:', json); // <= ici
 
-        if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.error || 'Failed to update entries');
-        }
-    return res.json();
-    },
+      if (!res.ok) {
+        throw new Error(json?.error ?? JSON.stringify(json) ?? 'Failed to update entries');
+      }
+
+      return json;
+    })
+  );
+  return results;
+},
+
     //client side optimistic update
     onMutate: (newEntries: Entry[]) => {
       queryClient.setQueryData(['entries'], (prevEntries: any) =>
@@ -468,7 +495,7 @@ function useDeleteEntry() {
 }
 
 
-const validateRequired = (value: string) => !!value && value.length;
+const validateRequired = (value: string) => value !== '';
 
 function validateEntry(entry: Entry) {
   return {

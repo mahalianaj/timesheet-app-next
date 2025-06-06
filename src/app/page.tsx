@@ -66,12 +66,14 @@ export default function App(){
         <UserBox users={users}/>
         <TimeStats users={users}/>
       </div>
-      <QueryClientProvider client={queryClient}>
+      <div className="p-7 bg-stone-50 ">
+        <QueryClientProvider client={queryClient}>
         <TimesheetTableInter/>
-        <Suspense fallback={null}>
-          <ReactQueryDevtoolsProduction />
-        </Suspense>
-    </QueryClientProvider>
+          <Suspense fallback={null}>
+            <ReactQueryDevtoolsProduction />
+          </Suspense>
+        </QueryClientProvider>
+      </div>
    </>
   )
 }
