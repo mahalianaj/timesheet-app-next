@@ -16,6 +16,8 @@
     "@mui/x-date-pickers": "^8.5.1",
     "@tanstack/react-query": "^5.80.6",
     "@tanstack/react-query-devtools": "^5.80.6",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "material-react-table": "^3.2.1",
     "next": "15.3.3",
     "react": "^19.0.0",

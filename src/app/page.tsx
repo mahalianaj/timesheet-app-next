@@ -15,6 +15,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import SideBar from "./components/Global/SideBar";
 
 
 // export const metadata: Metadata = {
@@ -47,54 +48,27 @@ const queryClient = new QueryClient();
 
 
 export default function App(){
-  const [users, setUsers] = useState<User[]>([]);
-  const [entries, setEntries] = useState<any[]>([]);
-  const [offDays, setOffDays] = useState<string[]>([]);
-    
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const [usersRes, entriesRes, offDaysRes] = await Promise.all([
-          fetch('/api/users'),
-          fetch('/api/entries'),
-          fetch('/api/off_days'),
-        ]);
-
-        if (!usersRes.ok || !entriesRes.ok || !offDaysRes.ok) {
-          throw new Error('Error fetching data');
-        }
-
-        const usersData = await usersRes.json();
-        const entriesData = await entriesRes.json();
-        const offDaysData = await offDaysRes.json();
-
-        setUsers(usersData.list);
-        setEntries(entriesData.list);
-        setOffDays(offDaysData.list);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-
   return(
    <QueryClientProvider client={queryClient}>
+      <div className="flex flex-row">
+      <SideBar/>
+      <div className="flex flex-col">
       <Navigation title={""}/>
+      
       <div className="flex flex-row justify-evenly py-6 bg-stone-50">
-        <UserBox users={users}/>
-        <TimeStats users={users} offDays={offDays} entries={entries}/>
+        <UserBox />
+        <TimeStats/>
       </div>
       <div className="p-7 bg-stone-50 ">
         
-        <TimesheetTableInter entries={entries} setEntries={setEntries}/>
+        <TimesheetTableInter/>
         
+      </div>
       </div>
     <Suspense fallback={null}>
       <ReactQueryDevtoolsProduction />
     </Suspense>
+    </div>
    </QueryClientProvider>
   )
 }

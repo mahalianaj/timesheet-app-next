@@ -1,8 +1,11 @@
 'use client'
 import { MdPerson, MdBusiness } from "react-icons/md";
 import { FaCalendar, FaFileContract, FaBuilding } from "react-icons/fa";
+import { useUsers } from "@/app/hooks/useUsers";
 
-export default function UserBox({ users }: { users?: User[] }) {
+export default function UserBox() {
+
+  const {data: users = []} = useUsers();
   if (!users || users.length === 0) {
     return <div>Loading user info...</div>
   }

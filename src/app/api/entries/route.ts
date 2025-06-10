@@ -106,6 +106,7 @@ export async function PATCH(req: Request) {
     const {Id, date, taskDescription, taskType, project, hours} = body;
     
     console.log('Processing entry:', {Id, date, taskDescription, taskType, project, hours});
+
     
     if (!Id) {
       return new Response(JSON.stringify({ error: 'Id is required' }), { status: 400 });

@@ -33,6 +33,7 @@ import {
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useEntries } from "@/app/hooks/useEntries";
 
 type EntryApiResponse = {
   data: Array<Entry>;
@@ -43,7 +44,6 @@ type EntryApiResponse = {
 
 
 export default function TimesheetTable(){
-    const [entries, setEntries] = useState([]);
     const [filteredEntries, setFilteredEntries] = useState<Entry[]>([]);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -93,7 +93,6 @@ export default function TimesheetTable(){
         try {
             const response = await fetch(url.href);
             const data = (await response.json()) as EntryApiResponse;
-            setEntries(data.list);
             setRowCount(data.pageInfo.totalRows);
         } catch (error) {
             setIsError(true);
@@ -127,13 +126,16 @@ export default function TimesheetTable(){
           onChange: (event) => {
             const newValue = event.target.value;
 
-            setEditedEntries((prev) => ({
-              ...prev,
-              [row.id]: {
-                ...row.original,
-                [cell.column.id]: newValue, 
-              },
-            }));
+            setEditedEntries((prev) => {
+              const existing = prev[row.id] ?? row.original;
+              return {
+                ...prev,
+                [row.id]: {
+                  ...existing,
+                  [cell.column.id]: newValue,
+                },
+              };
+            });
 
             if (validationErrors?.[cell.id]) {
               setValidationErrors((prev) => ({
@@ -159,17 +161,19 @@ export default function TimesheetTable(){
           required: true,
           error: !!validationErrors?.[cell.id],
           helperText: validationErrors?.[cell.id],
-          
           onChange: (event) => {
             const newValue = event.target.value;
 
-            setEditedEntries((prev) => ({
-              ...prev,
-              [row.id]: {
-                ...row.original,
-                [cell.column.id]: newValue, 
-              },
-            }));
+            setEditedEntries((prev) => {
+              const existing = prev[row.id] ?? row.original;
+              return {
+                ...prev,
+                [row.id]: {
+                  ...existing,
+                  [cell.column.id]: newValue,
+                },
+              };
+            });
 
             if (validationErrors?.[cell.id]) {
               setValidationErrors((prev) => ({
@@ -199,13 +203,16 @@ export default function TimesheetTable(){
                     onChange: (event) => {
             const newValue = event.target.value;
 
-            setEditedEntries((prev) => ({
-              ...prev,
-              [row.id]: {
-                ...row.original,
-                [cell.column.id]: newValue, 
-              },
-            }));
+            setEditedEntries((prev) => {
+              const existing = prev[row.id] ?? row.original;
+              return {
+                ...prev,
+                [row.id]: {
+                  ...existing,
+                  [cell.column.id]: newValue,
+                },
+              };
+            });
 
             if (validationErrors?.[cell.id]) {
               setValidationErrors((prev) => ({
@@ -238,13 +245,16 @@ export default function TimesheetTable(){
           onChange: (event) => {
             const newValue = event.target.value;
 
-            setEditedEntries((prev) => ({
-              ...prev,
-              [row.id]: {
-                ...row.original,
-                [cell.column.id]: newValue, 
-              },
-            }));
+            setEditedEntries((prev) => {
+              const existing = prev[row.id] ?? row.original;
+              return {
+                ...prev,
+                [row.id]: {
+                  ...existing,
+                  [cell.column.id]: newValue,
+                },
+              };
+            });
 
             if (validationErrors?.[cell.id]) {
               setValidationErrors((prev) => ({
@@ -265,6 +275,12 @@ export default function TimesheetTable(){
       {
         accessorKey: 'hours',
         header: 'Hours',
+        Footer: ({ table }) => {
+          const total = table
+            .getFilteredRowModel()
+            .rows.reduce((sum, row) => sum + Number(row.getValue('hours')), 0);
+          return <strong className="font-bold text-sm text-cyan-950">Total: {total.toFixed(2)} hours</strong>;
+        },
         muiEditTextFieldProps: ({ cell, row }) => ({
           type: 'number',
           required: true,
@@ -273,13 +289,16 @@ export default function TimesheetTable(){
           onChange: (event) => {
             const newValue = event.target.value;
 
-            setEditedEntries((prev) => ({
-              ...prev,
-              [row.id]: {
-                ...row.original,
-                [cell.column.id]: newValue, 
-              },
-            }));
+            setEditedEntries((prev) => {
+              const existing = prev[row.id] ?? row.original;
+              return {
+                ...prev,
+                [row.id]: {
+                  ...existing,
+                  [cell.column.id]: newValue,
+                },
+              };
+            });
 
             if (validationErrors?.[cell.id]) {
               setValidationErrors((prev) => ({
@@ -306,11 +325,11 @@ export default function TimesheetTable(){
     useCreateEntry();
   //call READ hook
   const {
-    data: fetchedEntries = [],
+    data: entries = [],
     isError: isLoadingEntriesError,
     isFetching: isFetchingEntries,
     isLoading: isLoadingEntries,
-  } = useGetEntries();
+  } = useEntries();
   //call UPDATE hook
   const { mutateAsync: updateEntries, isPending: isUpdatingEntries } =
     useUpdateEntry();
@@ -338,9 +357,12 @@ const handleSaveEntries = async () => {
   
   // Update all entries in parallel
   const entriesToUpdate = Object.values(editedEntries);
+
+  console.log(editedEntries);
   
   try {
-    await Promise.all(
+    
+     await Promise.all(
       entriesToUpdate.map(entry => updateEntries(entry))
     );
     
@@ -361,12 +383,19 @@ const handleSaveEntries = async () => {
 
 const table = useMaterialReactTable({
     columns,
-    data: fetchedEntries,
+    data: entries,
     createDisplayMode: 'row', // ('modal', and 'custom' are also available)
     editDisplayMode: 'table', // ('modal', 'row', 'cell', and 'custom' are also
     enableEditing: true,
+    enableDensityToggle: false,
+    enableStickyHeader: true,
     enableRowActions: true,
     positionActionsColumn: 'last',
+    enableColumnResizing: true,
+    enableColumnDragging: true,
+    enableColumnOrdering: true,
+    columnResizeMode: 'onChange',
+    layoutMode: 'grid',
     getRowId: (row) => String(row.Id),
     muiToolbarAlertBannerProps: isLoadingEntriesError
       ? {
@@ -376,7 +405,7 @@ const table = useMaterialReactTable({
       : undefined,
     muiTableContainerProps: {
       sx: {
-        minHeight: '500px',
+        minHeight: '50px',
       },
     },
     onCreatingRowCancel: () => setValidationErrors({}),
@@ -460,21 +489,21 @@ function useCreateEntry() {
   });
 }
 
-//READ hook (get entries from api)
-function useGetEntries() {
-  return useQuery<Entry[]>({
-    queryKey: ['entries'],
-    queryFn: async () => {
-    const response = await fetch('/api/entries');
-      if (!response.ok) {
-        throw new Error('Failed to fetch entries');
-      }
-      const data = await response.json();
-      return data.list; 
-    },
-    refetchOnWindowFocus: false,
-  });
-}
+// //READ hook (get entries from api)
+// function useGetEntries() {
+//   return useQuery<Entry[]>({
+//     queryKey: ['entries'],
+//     queryFn: async () => {
+//     const response = await fetch('/api/entries');
+//       if (!response.ok) {
+//         throw new Error('Failed to fetch entries');
+//       }
+//       const data = await response.json();
+//       return data.list; 
+//     },
+//     refetchOnWindowFocus: false,
+//   });
+// }
 
 //UPDATE hook (put entry in api)
 function useUpdateEntry() {
