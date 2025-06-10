@@ -124,16 +124,30 @@ export default function TimesheetTable(){
           required: true,
           error: !!validationErrors?.[cell.id],
           helperText: validationErrors?.[cell.id],
-          //store edited entry in state to be saved later
+          onChange: (event) => {
+            const newValue = event.target.value;
+
+            setEditedEntries((prev) => ({
+              ...prev,
+              [row.id]: {
+                ...row.original,
+                [cell.column.id]: newValue, 
+              },
+            }));
+
+            if (validationErrors?.[cell.id]) {
+              setValidationErrors((prev) => ({
+                ...prev,
+                [cell.id]: undefined,
+              }));
+            }
+          },
           onBlur: (event) => {
-            const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
-              : undefined;
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: validationError,
-            });
-            setEditedEntries({ ...editedEntries, [row.id]: row.original });
+            const isValid = validateRequired(event.currentTarget.value);
+            setValidationErrors((prev) => ({
+              ...prev,
+              [cell.id]: isValid ? undefined : 'Required',
+            }));
           },
         }),
       },
@@ -146,16 +160,30 @@ export default function TimesheetTable(){
           error: !!validationErrors?.[cell.id],
           helperText: validationErrors?.[cell.id],
           
-          //store edited entry in state to be saved later
+          onChange: (event) => {
+            const newValue = event.target.value;
+
+            setEditedEntries((prev) => ({
+              ...prev,
+              [row.id]: {
+                ...row.original,
+                [cell.column.id]: newValue, 
+              },
+            }));
+
+            if (validationErrors?.[cell.id]) {
+              setValidationErrors((prev) => ({
+                ...prev,
+                [cell.id]: undefined,
+              }));
+            }
+          },
           onBlur: (event) => {
-            const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
-              : undefined;
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: validationError,
-            });
-            setEditedEntries({ ...editedEntries, [row.id]: row.original });
+            const isValid = validateRequired(event.currentTarget.value);
+            setValidationErrors((prev) => ({
+              ...prev,
+              [cell.id]: isValid ? undefined : 'Required',
+            }));
           },
         }),
         
@@ -168,7 +196,7 @@ export default function TimesheetTable(){
           required: true,
           error: !!validationErrors?.[cell.id],
           helperText: validationErrors?.[cell.id],
-          onChange: (event) => {
+                    onChange: (event) => {
             const newValue = event.target.value;
 
             setEditedEntries((prev) => ({
@@ -207,16 +235,30 @@ export default function TimesheetTable(){
           required: true,
           error: !!validationErrors?.[cell.id],
           helperText: validationErrors?.[cell.id],
-          //store edited entry in state to be saved later
+          onChange: (event) => {
+            const newValue = event.target.value;
+
+            setEditedEntries((prev) => ({
+              ...prev,
+              [row.id]: {
+                ...row.original,
+                [cell.column.id]: newValue, 
+              },
+            }));
+
+            if (validationErrors?.[cell.id]) {
+              setValidationErrors((prev) => ({
+                ...prev,
+                [cell.id]: undefined,
+              }));
+            }
+          },
           onBlur: (event) => {
-            const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
-              : undefined;
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: validationError,
-            });
-            setEditedEntries({ ...editedEntries, [row.id]: row.original });
+            const isValid = validateRequired(event.currentTarget.value);
+            setValidationErrors((prev) => ({
+              ...prev,
+              [cell.id]: isValid ? undefined : 'Required',
+            }));
           },
         }),
       },
@@ -228,16 +270,30 @@ export default function TimesheetTable(){
           required: true,
           error: !!validationErrors?.[cell.id],
           helperText: validationErrors?.[cell.id],
-          //store edited entry in state to be saved later
+          onChange: (event) => {
+            const newValue = event.target.value;
+
+            setEditedEntries((prev) => ({
+              ...prev,
+              [row.id]: {
+                ...row.original,
+                [cell.column.id]: newValue, 
+              },
+            }));
+
+            if (validationErrors?.[cell.id]) {
+              setValidationErrors((prev) => ({
+                ...prev,
+                [cell.id]: undefined,
+              }));
+            }
+          },
           onBlur: (event) => {
-            const validationError = !validateRequired(event.currentTarget.value)
-              ? 'Required'
-              : undefined;
-            setValidationErrors({
-              ...validationErrors,
-              [cell.id]: validationError,
-            });
-            setEditedEntries({ ...editedEntries, [row.id]: row.original });
+            const isValid = validateRequired(event.currentTarget.value);
+            setValidationErrors((prev) => ({
+              ...prev,
+              [cell.id]: isValid ? undefined : 'Required',
+            }));
           },
         }),
       },
@@ -257,7 +313,7 @@ export default function TimesheetTable(){
   } = useGetEntries();
   //call UPDATE hook
   const { mutateAsync: updateEntries, isPending: isUpdatingEntries } =
-    useUpdateEntries();
+    useUpdateEntry();
   //call DELETE hook
   const { mutateAsync: deleteEntry, isPending: isDeletingEntry } =
     useDeleteEntry();
@@ -277,12 +333,24 @@ export default function TimesheetTable(){
     table.setCreatingRow(null); //exit creating mode
   };
 
-  //UPDATE action
-  const handleSaveEntries = async () => {
-    if (Object.values(validationErrors).some((error) => !!error)) return;
-    await updateEntries(Object.values(editedEntries));
+const handleSaveEntries = async () => {
+  if (Object.values(validationErrors).some((error) => !!error)) return;
+  
+  // Update all entries in parallel
+  const entriesToUpdate = Object.values(editedEntries);
+  
+  try {
+    await Promise.all(
+      entriesToUpdate.map(entry => updateEntries(entry))
+    );
+    
     setEditedEntries({});
-  };
+    console.log('All entries updated successfully!');
+  } catch (error) {
+    console.error('Error updating entries:', error);
+    // Optionally show user feedback here
+  }
+};
 
   //DELETE action
   const openDeleteConfirmModal = (row: MRT_Row<Entry>) => {
@@ -299,7 +367,7 @@ const table = useMaterialReactTable({
     enableEditing: true,
     enableRowActions: true,
     positionActionsColumn: 'last',
-    getRowId: (row) => row.Id,
+    getRowId: (row) => String(row.Id),
     muiToolbarAlertBannerProps: isLoadingEntriesError
       ? {
           color: 'error',
@@ -344,13 +412,7 @@ const table = useMaterialReactTable({
       <Button
         variant="contained"
         onClick={() => {
-          table.setCreatingRow(true); //simplest way to open the create row modal with no default values
-          //or you can pass in a row object to set default values with the `createRow` helper function
-          // table.setCreatingRow(
-          //   createRow(table, {
-          //     //optionally pass in default values for the new row, useful for nested data or other complex scenarios
-          //   }),
-          // );
+          table.setCreatingRow(true); 
         }}
       >
         Create New Entry
@@ -371,7 +433,6 @@ function useCreateEntry() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (entry: Entry) => {
-      //send api update request here
       const res = await fetch('/api/entries', {
             method: 'POST',
             headers: {
@@ -380,6 +441,7 @@ function useCreateEntry() {
             body: JSON.stringify(entry),
         });
     },
+    
     //client side optimistic update
     onMutate: (newEntryInfo: Entry) => {
       queryClient.setQueryData(
@@ -415,50 +477,32 @@ function useGetEntries() {
 }
 
 //UPDATE hook (put entry in api)
-function useUpdateEntries() {
+function useUpdateEntry() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (entries: Entry[]) => {
-  const results = await Promise.all(
-    entries.map(async (entry) => {
+    mutationFn: async (entry: Entry) => {
       const res = await fetch('/api/entries', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-       body: JSON.stringify({
-        Id: entry.Id,
-        date: entry.date,
-        taskDescription: entry.taskDescription,
-        taskType: entry.taskType,
-        project: entry.project,
-        hours: entry.hours,
-      }),
-      });
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(entry),
+        });
 
-      const json = await res.json();
-      console.log('PATCH response:', json); // <= ici
-
-      if (!res.ok) {
-        throw new Error(json?.error ?? JSON.stringify(json) ?? 'Failed to update entries');
+        if (!res.ok) {
+        throw new Error('Failed to update entry');
       }
-
-      return json;
-    })
-  );
-  return results;
-},
-
+      return res.json();
+    },
     //client side optimistic update
-    onMutate: (newEntries: Entry[]) => {
+    onMutate: (newEntryInfo: Entry) => {
       queryClient.setQueryData(['entries'], (prevEntries: any) =>
-        prevEntries?.map((entry: Entry) => {
-          const newEntry = newEntries.find((u) => u.Id === entry.Id);
-          return newEntry ? newEntry : entry;
-        }),
+        prevEntries?.map((prevEntry: Entry) =>
+          prevEntry.Id === newEntryInfo.Id ? newEntryInfo : prevEntry,
+        ),
       );
     },
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['entries'] }), //refetch entries after mutation, disabled for demo
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['entries'] }), 
   });
 }
 
@@ -493,7 +537,6 @@ function useDeleteEntry() {
     },
   });
 }
-
 
 const validateRequired = (value: string) => value !== '';
 

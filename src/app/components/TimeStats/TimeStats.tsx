@@ -2,94 +2,68 @@
 import { useState, useEffect } from "react";
 import { FaClock, FaHourglassHalf, FaRegCalendarCheck } from "react-icons/fa";
 
-export default function TimeStats({ users }: { users?: User[] }) {
-  const [offDays, setOffDays] = useState<string[]>([]);
-  const [entries, setEntries] = useState<any[]>([]);
+export default function TimeStats({
+  users,
+  entries,
+  offDays,
+}: {
+  users?: User[],
+  entries: any[],
+  offDays: string[]
+}) {
+
   const [hours, setHours] = useState<string>('');
   const [hoursConsumed, setHoursConsumed] = useState<string>('');
   const [hoursLeft, setHoursLeft] = useState<string>('');
   const user = users?.[0];
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const [offDaysRes, entriesRes] = await Promise.all([
-          fetch('/api/off_days'),
-          fetch('/api/entries')
-        ]);
+    if (!user || offDays.length === 0 || entries.length === 0) return;
 
-        if (!offDaysRes.ok || !entriesRes.ok) {
-          throw new Error('One or more failed to fetch');
-        }
+    const totalHours = totalHoursToWork(user.start_period, user.end_period);
+    const totalHoursConsumed = entries.reduce((sum, row) => sum + Number(row.hours), 0);
+    const totalHoursLeft = totalHours - totalHoursConsumed;
 
-        const offDaysData = await offDaysRes.json();
-        const entriesData = await entriesRes.json();
-
-        setOffDays(offDaysData.list);
-        setEntries(entriesData.list);
-      } catch (error) {
-        console.error('Error fetching data: ', error);
-      }
-    }
-    fetchData();
-  }, []);
-
-useEffect(() => {
-  if (!user) return;
-  let totalHours = totalHoursToWork(startDate, endDate);
-  let totalHoursConsumed  = entries.reduce((sum, row) => sum + Number(row.hours), 0);
-  let totalHoursLeft = totalHours - totalHoursConsumed; 
-  const string1= totalHours.toString();
-  const string2 = totalHoursConsumed.toString();
-  const string3 = totalHoursLeft.toString();
-  setHours(string1);
-  setHoursConsumed(string2);
-  setHoursLeft(string3);
-
-   if (
-    totalHours.toString() === hours &&
-    totalHoursConsumed.toString() === hoursConsumed &&
-    totalHoursLeft.toString() === hoursLeft
+      if (
+    hours === totalHours.toString() &&
+    hoursConsumed === totalHoursConsumed.toString() &&
+    hoursLeft === totalHoursLeft.toString()
   ) {
-    return
-  };
+    return;
+  }
 
-  const updatedUser = {
-    Id: user.Id,
-    total_hours: totalHours.toString(),
-    hours_consumed: totalHoursConsumed.toString(),
-    hours_left: totalHoursLeft.toString(),
-  };
+    setHours(totalHours.toString());
+    setHoursConsumed(totalHoursConsumed.toString());
+    setHoursLeft(totalHoursLeft.toString());
 
-  async function updateUserProfile() {
-    try {
-      const res = await fetch('/api/users', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedUser),
-      });
+    const updatedUser = {
+      Id: user.Id,
+      total_hours: totalHours.toString(),
+      hours_consumed: totalHoursConsumed.toString(),
+      hours_left: totalHoursLeft.toString(),
+    };
 
-      if (!res.ok) {
-        const error = await res.json();
-        console.error('Failed to update user profile:', error);
+    async function updateUserProfile() {
+      try {
+        const res = await fetch('/api/users', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedUser),
+        });
+
+        if (!res.ok) {
+          const error = await res.json();
+          console.error('Failed to update user profile:', error);
+        }
+      } catch (error) {
+        console.error('Error updating user profile:', error);
       }
-    } catch (error) {
-      console.error('Error updating user profile:', error);
     }
-  }
-  console.log("Updating user profile for:", user);
 
-  updateUserProfile();
-}, [entries, offDays, user]);
-
-
-  if (!users || users.length === 0) {
-    return <div>Loading user info...</div>
-  }
-  const startDate = user.start_period;
-  const endDate = user.end_period;
+    updateUserProfile();
+  }, [entries, offDays, user]);
 
   function totalHoursToWork(startDate: string, endDate: string) {
     const averageWorkDay = 8;
@@ -107,6 +81,89 @@ useEffect(() => {
 
     return workingDays * averageWorkDay;
   }
+
+  if (!users || users.length === 0) {
+    return <div>Loading user info...</div>;
+  }
+
+// useEffect(() => {
+//   if (!user) return;
+//   let totalHours = totalHoursToWork(startDate, endDate);
+//   let totalHoursConsumed  = entries.reduce((sum, row) => sum + Number(row.hours), 0);
+//   let totalHoursLeft = totalHours - totalHoursConsumed; 
+//   const string1= totalHours.toString();
+//   const string2 = totalHoursConsumed.toString();
+//   const string3 = totalHoursLeft.toString();
+//   setHours(string1);
+//   setHoursConsumed(string2);
+//   setHoursLeft(string3);
+
+//   //get out of loop if the data hasn't changed
+//    if (
+//     totalHours.toString() === hours &&
+//     totalHoursConsumed.toString() === hoursConsumed &&
+//     totalHoursLeft.toString() === hoursLeft
+//   ) {
+//     return
+//   };
+
+//   const updatedUser = {
+//     Id: user.Id,
+//     total_hours: totalHours.toString(),
+//     hours_consumed: totalHoursConsumed.toString(),
+//     hours_left: totalHoursLeft.toString(),
+//   };
+
+//   async function updateUserProfile() {
+//     try {
+//       const res = await fetch('/api/users', {
+//         method: 'PATCH',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(updatedUser),
+//       });
+
+//       if (!res.ok) {
+//         const error = await res.json();
+//         console.error('Failed to update user profile:', error);
+//       }
+//     } catch (error) {
+//       console.error('Error updating user profile:', error);
+//     }
+//   }
+//   console.log("Updating user profile for:", user);
+
+//   updateUserProfile();
+// }, [entries, offDays, user]);
+
+
+//   if (!users || users.length === 0) {
+//     return <div>Loading user info...</div>
+//   }
+//   const startDate = user.start_period;
+//   const endDate = user.end_period;
+
+//   function totalHoursToWork(startDate: string, endDate: string) {
+//     const averageWorkDay = 8;
+//     const start = new Date(startDate);
+//     const end = new Date(endDate);
+//     let workingDays = 0;
+//     const offDaysSet = new Set(offDays);
+
+//     let current = new Date(start);
+//     while (current <= end) {
+//       const dateStr = current.toISOString().split('T')[0];
+//       if (!offDaysSet.has(dateStr)) workingDays++;
+//       current.setDate(current.getDate() + 1);
+//     }
+
+//     return workingDays * averageWorkDay;
+//   }
+
+//   function Refresh(){
+
+//   }
 
  
 

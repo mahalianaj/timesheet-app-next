@@ -48,33 +48,54 @@ const queryClient = new QueryClient();
 
 export default function App(){
   const [users, setUsers] = useState<User[]>([]);
+  const [entries, setEntries] = useState<any[]>([]);
+  const [offDays, setOffDays] = useState<string[]>([]);
     
-        useEffect(() => {
-            async function fetchEntries() {
-              const res = await fetch('/api/users')
-              const data = await res.json()
-              console.log('Fetched users: ', data);
-              setUsers(data.list);
-            }
-            fetchEntries();
-        }, []);
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [usersRes, entriesRes, offDaysRes] = await Promise.all([
+          fetch('/api/users'),
+          fetch('/api/entries'),
+          fetch('/api/off_days'),
+        ]);
+
+        if (!usersRes.ok || !entriesRes.ok || !offDaysRes.ok) {
+          throw new Error('Error fetching data');
+        }
+
+        const usersData = await usersRes.json();
+        const entriesData = await entriesRes.json();
+        const offDaysData = await offDaysRes.json();
+
+        setUsers(usersData.list);
+        setEntries(entriesData.list);
+        setOffDays(offDaysData.list);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
 
   return(
-   <>
+   <QueryClientProvider client={queryClient}>
       <Navigation title={""}/>
       <div className="flex flex-row justify-evenly py-6 bg-stone-50">
         <UserBox users={users}/>
-        <TimeStats users={users}/>
+        <TimeStats users={users} offDays={offDays} entries={entries}/>
       </div>
       <div className="p-7 bg-stone-50 ">
-        <QueryClientProvider client={queryClient}>
-        <TimesheetTableInter/>
-          <Suspense fallback={null}>
-            <ReactQueryDevtoolsProduction />
-          </Suspense>
-        </QueryClientProvider>
+        
+        <TimesheetTableInter entries={entries} setEntries={setEntries}/>
+        
       </div>
-   </>
+    <Suspense fallback={null}>
+      <ReactQueryDevtoolsProduction />
+    </Suspense>
+   </QueryClientProvider>
   )
 }
 
