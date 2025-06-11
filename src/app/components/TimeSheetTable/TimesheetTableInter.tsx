@@ -14,7 +14,6 @@ import '../../styles/login.css'
 import '../../styles/table.css'
 import {
   Box,
-  Button,
   CircularProgress,
   IconButton,
   Tooltip,
@@ -55,10 +54,10 @@ export default function TimesheetTable(){
     const [rowCount, setRowCount] = useState(0);
 
     //table state
-  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
-    [],
-  );
-  const [globalFilter, setGlobalFilter] = useState('');
+  //const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
+  //   [],
+  // );
+  //const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState<MRT_SortingState>([]);
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
@@ -73,7 +72,6 @@ export default function TimesheetTable(){
 
     useEffect(() => {
         const fetchEntries = async () => {
-            console.log(entries);
         if (!entries.length) {
             setIsLoading(true);
         } else {
@@ -106,11 +104,11 @@ export default function TimesheetTable(){
         fetchEntries();
 
     }, [
-        columnFilters, //re-fetch when column filters change
-        globalFilter, //re-fetch when global filter changes
+        //columnFilters, //re-fetch when column filters change
+        //globalFilter, //re-fetch when global filter changes
         pagination.pageIndex, //re-fetch when page index changes
         pagination.pageSize, //re-fetch when page size changes
-        sorting, //re-fetch when sorting changes
+        //sorting, //re-fetch when sorting changes
     ]);
 
     const columns = useMemo<MRT_ColumnDef<Entry>[]>(
@@ -392,8 +390,6 @@ const table = useMaterialReactTable({
     enableRowActions: true,
     positionActionsColumn: 'last',
     enableColumnResizing: true,
-    enableColumnDragging: true,
-    enableColumnOrdering: true,
     columnResizeMode: 'onChange',
     layoutMode: 'grid',
     getRowId: (row) => String(row.Id),
@@ -411,19 +407,19 @@ const table = useMaterialReactTable({
     onCreatingRowCancel: () => setValidationErrors({}),
     onCreatingRowSave: handleCreateEntry,
     renderRowActions: ({ row }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
+      <Box sx={{ display: 'flex', gap: '1rem',  }}>
         <Tooltip title="Delete">
           <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
-            <DeleteIcon />
+            <DeleteIcon className="text-gray-600" />
           </IconButton>
         </Tooltip>
       </Box>
     ),
     renderBottomToolbarCustomActions: () => (
       <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <Button
+        <button
+          className="text-cyan-50 bg-cyan-700 rounded p-2 px-3 ml-3 hover:bg-cyan-800"
           color="success"
-          variant="contained"
           onClick={handleSaveEntries}
           disabled={
             Object.keys(editedEntries).length === 0 ||
@@ -431,21 +427,21 @@ const table = useMaterialReactTable({
           }
         >
           {isUpdatingEntries ? <CircularProgress size={25} /> : 'Save'}
-        </Button>
+        </button>
         {Object.values(validationErrors).some((error) => !!error) && (
           <Typography color="error">Fix errors before submitting</Typography>
         )}
       </Box>
     ),
     renderTopToolbarCustomActions: ({ table }) => (
-      <Button
-        variant="contained"
+      <button
+        className="text-cyan-50 bg-cyan-700 rounded p-2 px-3 mt-1 ml-3 hover:bg-cyan-800"
         onClick={() => {
           table.setCreatingRow(true); 
         }}
       >
         Create New Entry
-      </Button>
+      </button>
     ),
     state: {
       isLoading: isLoadingEntries,

@@ -22,9 +22,7 @@ export default function SendSheet(){
     const handleFilteredEntries = (entries: Entry[]) => {
         setFiltered(entries);
     };
-
-    
-    
+ 
     const generatePDF = (entries: Entry[], startDate: string, endDate: string, user: User) => {
         const doc = new jsPDF();
         function centerText(doc: jsPDF, text: string, y: number) {
@@ -99,9 +97,9 @@ export default function SendSheet(){
 
     return (
         <>
-        <h1 className="text-lg font-bold">Export Timesheet </h1>
-         <div className="flex flex-row w-full items-center gap-20">
-            <div className="flex flex-col items-center pl-25">
+        <h1 className="text-lg font-bold pb-5">Export Timesheet </h1>
+         <div className="flex flex-row w-full items-center gap-25">
+            <div className="flex flex-col pl-25">
             {!startDate || !endDate ? 
             <p className="text-gray-500 italic mt-4">Please select both start and end dates to filter entries.</p>
             : ''}
@@ -133,7 +131,7 @@ export default function SendSheet(){
             </button>
             )}
 
-        {/* <TimesheetList startDate={startDate} endDate={endDate} onFilter={handleFilteredEntries}/> */}
+        <TimesheetList startDate={startDate} endDate={endDate} onFilter={handleFilteredEntries}/>
             </div>
             <div className="flex w-4xl">
             {pdfUrl && (

@@ -91,23 +91,9 @@ export default function TimeStats() {
   return (
     <div className="flex flex-row gap-3">
 
-        {/* Total Hours */}
-        <div className="flex items-center gap-4 px-4 pt-4 bg-white rounded-xl shadow-md border border-gray-200">
-            <div className="bg-rose-50 p-3 rounded-full">
-            <FaRegCalendarCheck className="text-blue-950 text-2xl" />
-            </div>
-            <div>
-            <label className="text-gray-500">Total Hours</label>
-            <div className="text-black text-3xl font-bold">{hours}</div>
-            </div>
-        </div>
-
-        <div className="flex flex-col gap-3 justify-between">
-
-
         {/* Hours Consumed */}
         <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-gray-200">
-            <div className="bg-rose-50 p-3 rounded-full">
+            <div className="bg-cyan-50 p-3 rounded-full">
             <FaClock className="text-cyan-950 text-2xl" />
             </div>
             <div>
@@ -118,7 +104,7 @@ export default function TimeStats() {
 
         {/* Hours Left */}
         <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-gray-200">
-            <div className="bg-rose-50 p-3 rounded-full">
+            <div className="bg-cyan-50 p-3 rounded-full">
             <FaHourglassHalf className="text-cyan-950 text-2xl" />
             </div>
             <div>
@@ -127,6 +113,15 @@ export default function TimeStats() {
             </div>
         </div>
 
+        {/* Total Hours */}
+        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-gray-200">
+            <div className="bg-cyan-50 p-3 rounded-full">
+            <FaRegCalendarCheck className="text-blue-950 text-2xl" />
+            </div>
+            <div>
+            <label className="text-gray-500">Total Hours</label>
+            <div className="text-black text-3xl font-bold">{hours}</div>
+            </div>
         </div>
     </div>
   );
