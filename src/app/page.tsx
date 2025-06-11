@@ -35,41 +35,20 @@ import SideBar from "./components/Global/SideBar";
 //   },
 // }
 
-const ReactQueryDevtoolsProduction = lazy(() =>
-  import('@tanstack/react-query-devtools/build/modern/production.js').then(
-    (d) => ({
-      default: d.ReactQueryDevtools,
-    }),
-  ),
-);
-
-const queryClient = new QueryClient();
 
 
 
 export default function App(){
   return(
-   <QueryClientProvider client={queryClient}>
-      <div className="flex flex-row">
-      <SideBar/>
-      <div className="flex flex-col">
-      <Navigation title={""}/>
-      
+    <>
       <div className="flex flex-row justify-evenly py-6 bg-stone-50">
         <UserBox />
         <TimeStats/>
       </div>
-      <div className="p-7 bg-stone-50 ">
-        
-        <TimesheetTableInter/>
-        
+      <div className="p-7 bg-stone-50 ">    
+        <TimesheetTableInter/>        
       </div>
-      </div>
-    <Suspense fallback={null}>
-      <ReactQueryDevtoolsProduction />
-    </Suspense>
-    </div>
-   </QueryClientProvider>
+    </>
   )
 }
 

@@ -15,7 +15,7 @@ export default function UserBox() {
   return (
     <div className="flex flex-row p-4 max-w-3xl bg-white rounded-xl shadow-md border border-gray-200">
       <div className="flex flex-row items-center-safe pr-4 bg-blue">
-        <img src={'https://avatar.iran.liara.run/public/85'} className="w-35 rounded-full object-cover mr-4 " />
+        <img src={'https://avatar.iran.liara.run/public/85'} alt="profile picture" className="w-35 rounded-full object-cover mr-4 " />
       </div>
       <div className="flex flex-col w-full h-full">
         <span className="mx-1 mb-1 p-1 text-xl font-semibold">{user.consultant}</span>

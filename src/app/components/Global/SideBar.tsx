@@ -2,69 +2,77 @@
 
 import { useState, createContext, useContext, ReactNode } from 'react';
 import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from 'react-icons/ri';
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+
 import {GrMenu } from 'react-icons/gr';
 
 import { PiExportBold } from "react-icons/pi";
-import Export from './Export';
+import { useRouter } from 'next/navigation';
+import App from '@/app/page';
+import { IconType } from 'react-icons/lib';
 
+type SidebarContextType = {
+  expanded: boolean;
+};
+
+const SidebarContext = createContext<SidebarContextType>({ expanded: true });
+
+type SideBarProps = {
+  children: ReactNode;
+};
 
 export default function SideBar() { 
+    const router = useRouter();
+    const [expanded, setExpanded] = useState(true);
+    // const handleNavigation = async (e: any) => {
+    //   e.preventDefault();
+    //   router.push('/sendSheet')
+    // }
+
   return (
-    <aside className='bg-cyan-900 w-64'>
-      <span className='text-rose-50'>SideBar</span>
+    <>
+     <SidebarContext.Provider value={{ expanded }}>
+    <aside className='bg-cyan-900 '>
+      <div className='p-4 flex justify-between items-center'>
+      <span className={` ${expanded ? 'm-2 pl-2' : ''} font-bold text-xl text-cyan-50`}>
+        <h1 >{expanded ? 'Menu' : null }</h1>
+      </span>
+        <button
+            onClick={() => setExpanded((prev) => !prev)}
+            className="p-2  rounded-md hover:bg-cyan-800">
+            {expanded ? <RiArrowLeftDoubleFill className='text-cyan-50 text-2xl' /> : <GrMenu className='text-cyan-50 text-2xl'/>}
+          </button>
+      </div>
+      <div className="p-0.5 flex flex-col justify-between ">
       <ul>
-        <li onClick={() => Export} className='flex items-center cursor-pointer m-2 text-cyan-50 rounded-md p-1 hover:bg-cyan-800 hover:text-white'>
-          <PiExportBold className='text-lg'/>
-          <span className='m-2'>Export Timesheet</span>
-        </li>
+    <SideBarItem text='Dashboard' Icon={MdOutlineSpaceDashboard}  route='/'/>
+    <SideBarItem text='Export Timesheet' Icon={PiExportBold} route='/sendSheet'/>
       </ul>
+      </div>
     </aside>
+    </SidebarContext.Provider>
+    </>
   );
 }
 
-// type SidebarContextType = {
-//   expanded: boolean;
-// };
+type SideBarItemProps = {
+  Icon: IconType;
+  text: string;
+  route: string;
+};
 
-// const SidebarContext = createContext<SidebarContextType>({ expanded: true });
+function SideBarItem({ Icon, text, route }: SideBarItemProps) {
+  const { expanded } = useContext(SidebarContext);
+  const router = useRouter();
 
-// type SideBarProps = {
-//   children: ReactNode;
-// };
+  return (
+    <li onClick={() => router.push(route)} 
+    title={text}
+          className={`flex items-center cursor-pointer text-cyan-50 rounded-md  hover:bg-cyan-800 hover:text-white
+          ${expanded ? 'mx-2 mb-2' : 'm-3' }`}>
+          <span className={` ${expanded ? 'gap-3 m-3 ' : 'justify-center m-2' } w-full items-center flex cursor-pointer  text-cyan-50 rounded-md  hover:bg-cyan-800 hover:text-white`}>
+             <Icon className='text-2xl'/> {expanded ? text : null} </span> 
+        </li>
+  );
+}
 
-// export default function SideBar({ children }: SideBarProps) {
-//   const [expanded, setExpanded] = useState(true);
-
-//   return (
-//     <SidebarContext.Provider value={{ expanded }}>
-//       <aside className="h-screen bg-white border-r shadow-sm flex flex-col">
-//         <div className="p-4 flex justify-between items-center">
-//           <h1 className="font-bold text-lg">{expanded ? 'Menu' : null }</h1>
-//           <button
-//             onClick={() => setExpanded((prev) => !prev)}
-//             className="p-2 rounded hover:bg-gray-200"
-//           >
-//             {expanded ? <RiArrowLeftDoubleFill /> : <GrMenu/>}
-//           </button>
-//         </div>
-//         <nav className="flex-1 px-2">{children}</nav>
-//       </aside>
-//     </SidebarContext.Provider>
-//   );
-// }
-
-// type SideBarItemProps = {
-//   icon: React.ReactNode;
-//   text: string;
-// };
-
-// export function SideBarItem({ icon, text }: SideBarItemProps) {
-//   const { expanded } = useContext(SidebarContext);
-
-//   return (
-//     <div className="flex justify-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer ">
-//       <span className='flex items-center justify-center'>{icon}</span>
-//       {expanded ? text : null}
-//     </div>
-//   );
-// }
