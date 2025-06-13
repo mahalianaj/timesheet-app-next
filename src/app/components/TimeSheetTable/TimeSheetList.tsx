@@ -7,7 +7,6 @@ type TimesheetListProps = {
     startDate: string;
     endDate: string;
     onFilter: (entries: Entry[]) => void;
-
 }
 
 export default function TimesheetList({startDate, endDate, onFilter}: TimesheetListProps){
@@ -15,7 +14,6 @@ export default function TimesheetList({startDate, endDate, onFilter}: TimesheetL
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    
     const filteredEntries =  entries.filter((entry: Entry) => {
         const entryDate = new Date(entry.date);
         return entryDate >= start && entryDate <= end;
@@ -27,7 +25,6 @@ export default function TimesheetList({startDate, endDate, onFilter}: TimesheetL
         onFilter(filteredEntries);
       }
     }, [startDate, endDate, entries]);
-
 
     return (
         <>

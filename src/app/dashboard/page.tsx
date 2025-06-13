@@ -9,7 +9,7 @@ export default function Dashboard(){
   return(
     <>
       <Navigation title="My Dashboard"/>
-      <div className="flex flex-row justify-evenly pb-3 bg-stone-50">
+      <div className="flex flex-row justify-evenly pb-3 bg-oasis-50">
         <DefTimeStats/>
       </div>
       <div className="p-1 bg-stone-50 ">    

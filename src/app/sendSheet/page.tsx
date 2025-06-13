@@ -163,7 +163,7 @@ export default function SendSheet(){
               value={startDate}
               required
               onChange={(e) => setStartDate(e.target.value)}
-              className="mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-cyan-500"
+              className="mt-1 block w-full border border-cove-500 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-oasis-50"
             />
           </label>
 
@@ -174,7 +174,7 @@ export default function SendSheet(){
               value={endDate}
               required
               onChange={(e) => setEndDate(e.target.value)}
-              className="mt-1 block w-full border rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-cyan-500"
+              className="mt-1 block w-full border border-cove-500 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-oasis-50"
             />
           </label>
 
@@ -187,7 +187,7 @@ export default function SendSheet(){
         <button
             onClick={() => generatePDF(filtered!, startDate, endDate, user)}
             disabled={!startDate || !endDate || !filtered || filtered.length === 0}
-            className={`bg-cyan-800 text-white rounded-md py-2 px-4 hover:bg-cyan-700 transition
+            className={`bg-cove-500 text-white rounded-md py-2 px-4 hover:bg-cove-700 transition cursor-pointer
                 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400`}
             >
             Generate PDF preview
@@ -196,7 +196,7 @@ export default function SendSheet(){
         <a
             href={pdfUrl || '#'}
             download={pdfFileName}
-            className={`flex items-center justify-center bg-cyan-800 gap-2 text-center text-white rounded-md py-2 px-4 hover:bg-cyan-700 transition
+            className={`flex items-center justify-center bg-cove-500 gap-2 text-center text-white rounded-md py-2 px-4 hover:bg-cove-700 transition
                 ${!pdfUrl ? 'pointer-events-none bg-gray-400 cursor-not-allowed hover:bg-gray-400' : ''}`}
             >
                 <MdOutlineFileDownload className="text-xl" />

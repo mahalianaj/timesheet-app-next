@@ -20,7 +20,20 @@
   }
 }
 
-/* 'wild-blue-yonder': {
+@theme {
+  --color-wild-50: #f3f6fa;
+  --color-wild-100: #e9eef6;
+  --color-wild-200: #d7e0ee;
+  --color-wild-300: #bfcbe2;
+  --color-wild-400: #a4b1d5;
+  --color-wild-500: #8d98c7;
+  --color-wild-600: #7e85bb;
+  --color-wild-700: #63689f;
+  --color-wild-800: #525781;
+  --color-wild-900: #464a69;
+  --color-wild-950: #292b3d;
+}
+/* 'wild': {
     '50': '#f3f6fa',
     '100': '#e9eef6',
     '200': '#d7e0ee',

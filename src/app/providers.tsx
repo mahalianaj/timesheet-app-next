@@ -19,7 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             {/* <Navigation title="" />  */}
 
             {/* Page content injected here */}
-            <main className="flex-grow overflow-auto p-4 bg-stone-50">
+            <main className="flex-grow overflow-auto p-4 bg-oasis-50">
               {children}
             </main>
           {/* </div> */}

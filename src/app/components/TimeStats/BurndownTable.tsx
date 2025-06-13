@@ -11,11 +11,11 @@ type BurndownRow = {
 export default function BurndownTable({ data }: { data: BurndownRow[] }) {
   return (
     <div className="mt-8 bg-white rounded-3xl shadow-md border w-full lg:w-5/6 border-gray-200 overflow-hidden">
-      <div className="bg-cyan-800 text-white text-lg font-semibold px-6 py-4">
+      <div className="bg-cove-800 text-white text-lg font-semibold px-6 py-4">
         Monthly Burndown Summary
       </div>
-      <table className="min-w-full text-left text-cyan-950">
-        <thead className="bg-cyan-50 text-cyan-900 ">
+      <table className="min-w-full text-left text-cove-800">
+        <thead className="bg-oasis-50 text-cove-900 ">
           <tr>
             <th className="px-6 py-3 text-sm font-bold">Month</th>
             <th className="px-6 py-3 text-sm font-bold text-right">Ideal Hours</th>
@@ -32,7 +32,7 @@ export default function BurndownTable({ data }: { data: BurndownRow[] }) {
             return (
               <tr
                 key={month}
-                className={`${isTotal ? 'bg-cyan-50 text-cyan-900 font-semibold' : 'even:bg-gray-50'}`}
+                className={`${isTotal ? 'bg-cove-100 text-cove-900 font-semibold' : 'even:bg-gray-50'}`}
               >
                 <td className="px-6 py-4">{month}</td>
                 <td className="px-6 py-4 text-right">

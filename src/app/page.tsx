@@ -9,15 +9,6 @@ import TimesheetTableInter from "./components/TimeSheetTable/TimesheetTableInter
 import { redirect } from 'next/navigation';
 
 
-import { lazy, Suspense, useState, useEffect } from 'react';
-import {
-  QueryClient,
-  QueryClientProvider,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
-import SideBar from "./components/Global/SideBar";
 
 
 // export const metadata: Metadata = {

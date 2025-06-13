@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -10,6 +11,36 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+}
+
+@theme {
+--color-cove-50: #f4f7fa;
+--color-cove-100: #e5ebf4;
+--color-cove-200: #d1dcec;
+--color-cove-300: #b1c6df;
+--color-cove-400: #8ca9ce;
+--color-cove-500: #6a88be;
+--color-cove-600: #5d76b3;
+--color-cove-700: #5265a3;
+--color-cove-800: #475586;
+--color-cove-900: #3d486b;
+--color-cove-950: #282d43;
+
+--color-oasis-50: #fef9ee;
+--color-oasis-100: #fcecca;
+--color-oasis-200: #fadfae;
+--color-oasis-300: #f6c77b;
+--color-oasis-400: #f1a646;
+--color-oasis-500: #ed8b22;
+--color-oasis-600: #de7118;
+--color-oasis-700: #b85716;
+--color-oasis-800: #934519;
+--color-oasis-900: #763a18;
+--color-oasis-950: #401c0a;
+
+
+
 }
 
 /* @media (prefers-color-scheme: dark) {

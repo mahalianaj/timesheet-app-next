@@ -93,34 +93,34 @@ export default function DefTimeStats() {
 
         {/* Hours Consumed */}
         <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-white">
-            <div className="bg-cyan-50 p-3 rounded-full">
-            <FaClock className="text-cyan-950 text-2xl" />
+            <div className="bg-oasis-50 p-3 rounded-full">
+            <FaClock className="text-cove-600 text-2xl" />
             </div>
             <div>
             <label className="text-gray-500">Hours Consumed</label>
-            <div className="text-cyan-950 text-3xl font-bold">{hoursConsumed}</div>
+            <div className="text-cove-500 text-3xl font-bold">{hoursConsumed}</div>
             </div>
         </div>
 
         {/* Hours Left */}
         <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-white">
-            <div className="bg-cyan-50 p-3 rounded-full">
-            <FaHourglassHalf className="text-cyan-950 text-2xl" />
+            <div className="bg-oasis-50 p-3 rounded-full">
+            <FaHourglassHalf className="text-cove-600 text-2xl" />
             </div>
             <div>
             <label className="text-gray-500">Hours Left</label>
-            <div className="text-black text-3xl font-bold">{hoursLeft}</div>
+            <div className="text-cove-500 text-3xl font-bold">{hoursLeft}</div>
             </div>
         </div>
 
         {/* Total Hours */}
         <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-white">
-            <div className="bg-cyan-50 p-3 rounded-full">
-            <FaRegCalendarCheck className="text-blue-950 text-2xl" />
+            <div className="bg-oasis-50 p-3 rounded-full">
+            <FaRegCalendarCheck className="text-cove-600 text-2xl" />
             </div>
             <div>
             <label className="text-gray-500">Total Hours</label>
-            <div className="text-black text-3xl font-bold">{hours}</div>
+            <div className="text-cove-500 text-3xl font-bold">{hours}</div>
             </div>
         </div>
     </div>

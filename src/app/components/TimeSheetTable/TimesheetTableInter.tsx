@@ -5,11 +5,9 @@ import {
   useMaterialReactTable,
   MRT_ToggleFullScreenButton,
   MRT_ToggleDensePaddingButton,
-  MRT_ActionMenuItem,
   type MRT_ColumnDef,
   type MRT_Row,
   type MRT_TableOptions,
-  type MRT_ColumnFiltersState,
   type MRT_PaginationState,
   type MRT_SortingState,
 } from 'material-react-table';
@@ -26,10 +24,7 @@ import {
   FormHelperText,
 } from '@mui/material';
 import {
-  QueryClient,
-  QueryClientProvider,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 
@@ -425,7 +420,7 @@ const table = useMaterialReactTable({
     renderBottomToolbarCustomActions: () => (
       <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center'}}>
         <button
-          className="text-cyan-50 bg-cyan-700 rounded p-1 px-3 ml-3 hover:bg-cyan-800"
+          className="text-cove-50 bg-cove-600 rounded p-1 px-3 ml-3 hover:bg-cove-700 transition-all"
           color="success"
           onClick={handleSaveEntries}
           disabled={
@@ -442,7 +437,7 @@ const table = useMaterialReactTable({
     ),
     renderTopToolbarCustomActions: ({ table }) => (
       <button
-        className="text-cyan-50 bg-cyan-700 rounded p-2 px-3 mt-1 ml-3 hover:bg-cyan-800"
+        className="text-cove-50 bg-cove-600 rounded p-2 px-3 mt-1 ml-3 hover:bg-cove-700"
         onClick={() => {
           table.setCreatingRow(true); 
         }}
