@@ -89,10 +89,10 @@ export default function DefTimeStats() {
   }
 
   return (
-    <div className="flex flex-row gap-3">
+    <div className="flex flex-row  gap-3">
 
         {/* Hours Consumed */}
-        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-gray-200">
+        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-white">
             <div className="bg-cyan-50 p-3 rounded-full">
             <FaClock className="text-cyan-950 text-2xl" />
             </div>
@@ -103,7 +103,7 @@ export default function DefTimeStats() {
         </div>
 
         {/* Hours Left */}
-        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-gray-200">
+        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-white">
             <div className="bg-cyan-50 p-3 rounded-full">
             <FaHourglassHalf className="text-cyan-950 text-2xl" />
             </div>
@@ -114,7 +114,7 @@ export default function DefTimeStats() {
         </div>
 
         {/* Total Hours */}
-        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-gray-200">
+        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-white">
             <div className="bg-cyan-50 p-3 rounded-full">
             <FaRegCalendarCheck className="text-blue-950 text-2xl" />
             </div>

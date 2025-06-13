@@ -18,3 +18,9 @@ type Entry = {
   project: string;
   hours: string;
 };
+
+type BurndownData = {
+  month: string;       
+  idealHours: number;  
+  consumedHours: number;
+};

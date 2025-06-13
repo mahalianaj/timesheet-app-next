@@ -76,7 +76,8 @@ export default function SendSheet(){
 
   const afterUserTableY = (doc as any).lastAutoTable.finalY + 10;
 
-  centerText(`Work Period: ${startDate} to ${endDate}`, afterUserTableY, 12, false);
+
+  centerText('Summary of the work fot the reporting period.', afterUserTableY, 12, false);
 
   // Entries Table
   const tableData = entries.map((entry) => [

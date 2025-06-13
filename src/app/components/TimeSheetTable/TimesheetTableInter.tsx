@@ -3,6 +3,9 @@ import { useEffect, lazy, Suspense, useState, useMemo } from "react"
 import {
   MaterialReactTable,
   useMaterialReactTable,
+  MRT_ToggleFullScreenButton,
+  MRT_ToggleDensePaddingButton,
+  MRT_ActionMenuItem,
   type MRT_ColumnDef,
   type MRT_Row,
   type MRT_TableOptions,
@@ -30,7 +33,6 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEntries } from "@/app/hooks/useEntries";
 
@@ -116,6 +118,7 @@ export default function TimesheetTable(){
       {
         accessorKey: 'date',
         header: 'Date',
+        size: 110,
         muiEditTextFieldProps: ({ cell, row }) => ({
           type: 'date',
           required: true,
@@ -154,6 +157,7 @@ export default function TimesheetTable(){
       {
         accessorKey: 'taskDescription',
         header: 'Task Description',
+        
         muiEditTextFieldProps: ({ cell, row }) => ({
           type: 'text',
           required: true,
@@ -188,11 +192,11 @@ export default function TimesheetTable(){
             }));
           },
         }),
-        
       },
       {
         accessorKey: 'taskType',
         header: 'Task Type',
+        size: 75 ,
         muiEditTextFieldProps: ({ cell, row }) => ({
           select: true,
           required: true,
@@ -235,6 +239,8 @@ export default function TimesheetTable(){
       {
         accessorKey: 'project',
         header: 'Project',
+        size: 100,
+
         muiEditTextFieldProps: ({ cell, row }) => ({
           type: 'text',
           required: true,
@@ -272,16 +278,12 @@ export default function TimesheetTable(){
       },
       {
         accessorKey: 'hours',
-        header: 'Hours',
-        Footer: ({ table }) => {
-          const total = table
-            .getFilteredRowModel()
-            .rows.reduce((sum, row) => sum + Number(row.getValue('hours')), 0);
-          return <strong className="font-bold text-sm text-cyan-950">Total: {total.toFixed(2)} hours</strong>;
-        },
+        header: 'Time',
+        maxSize: 55,
         muiEditTextFieldProps: ({ cell, row }) => ({
           type: 'number',
           required: true,
+          sx:{textAlign: "right"},
           error: !!validationErrors?.[cell.id],
           helperText: validationErrors?.[cell.id],
           onChange: (event) => {
@@ -389,9 +391,14 @@ const table = useMaterialReactTable({
     enableStickyHeader: true,
     enableRowActions: true,
     positionActionsColumn: 'last',
-    enableColumnResizing: true,
-    columnResizeMode: 'onChange',
     layoutMode: 'grid',
+    renderToolbarInternalActions: ({ table }) => (
+      <Box>
+        {/* along-side built-in buttons in whatever order you want them */}
+        <MRT_ToggleDensePaddingButton table={table} />
+        <MRT_ToggleFullScreenButton table={table} />
+      </Box>
+    ),
     getRowId: (row) => String(row.Id),
     muiToolbarAlertBannerProps: isLoadingEntriesError
       ? {
@@ -407,7 +414,7 @@ const table = useMaterialReactTable({
     onCreatingRowCancel: () => setValidationErrors({}),
     onCreatingRowSave: handleCreateEntry,
     renderRowActions: ({ row }) => (
-      <Box sx={{ display: 'flex', gap: '1rem',  }}>
+      <Box sx={{ display: 'flex', gap: '1rem', }}>
         <Tooltip title="Delete">
           <IconButton color="error" onClick={() => openDeleteConfirmModal(row)}>
             <DeleteIcon className="text-gray-600" />
@@ -416,9 +423,9 @@ const table = useMaterialReactTable({
       </Box>
     ),
     renderBottomToolbarCustomActions: () => (
-      <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center'}}>
         <button
-          className="text-cyan-50 bg-cyan-700 rounded p-2 px-3 ml-3 hover:bg-cyan-800"
+          className="text-cyan-50 bg-cyan-700 rounded p-1 px-3 ml-3 hover:bg-cyan-800"
           color="success"
           onClick={handleSaveEntries}
           disabled={
