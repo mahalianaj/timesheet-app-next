@@ -5,18 +5,16 @@ export default function Navigation(props: any) {
   const dateString = today.toDateString();
 
   return (
-    <nav className="bg-cyan-950 border-b border-gray-300 shadow-sm ">
-      <div className="w-full flex flex-wrap justify-evenly items-center p-4">
-        <span className="text-3xl font-extrabold flex tracking-wide text-cyan-50 select-none">
-          Timesheet App{props.title}
+    <nav className="  flex  justify-between items-center px-3 pb-5">
+        <span className="text-xl font-extrabold flex justify-start tracking-wide text-cyan-950 select-none">
+          {props.title}
         </span>
-        <div className="flex items-center justify-end flex-row gap-5">
-        <div className="flex items-center space-x-2 bg-cyan-50 text-black rounded-lg px-4 py-2 font-semibold font-sans select-none">
+        <div className=" items-center justify-end align-">
+        <div className="flex items-center space-x-2 bg-cyan-950 text-cyan-50 rounded-lg px-4 py-2 font-semibold font-sans select-none">
           <FaRegCalendarAlt className="text-lg" />
           <span>Today is {dateString}</span>
         </div>
         </div>
-      </div>
     </nav>
   );
 }

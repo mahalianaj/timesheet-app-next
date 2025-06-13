@@ -6,6 +6,8 @@ import Navigation from "./components/Global/NavBar";
 import UserBox from "./components/UserBox/UserBox";
 import TimeStats from "./components/TimeStats/TimeStats";
 import TimesheetTableInter from "./components/TimeSheetTable/TimesheetTableInter";
+import { redirect } from 'next/navigation';
+
 
 import { lazy, Suspense, useState, useEffect } from 'react';
 import {
@@ -39,6 +41,7 @@ import SideBar from "./components/Global/SideBar";
 
 
 export default function App(){
+  redirect('/dashboard');
   return(
     <>
       <div className="flex flex-row justify-evenly py-6 bg-stone-50">

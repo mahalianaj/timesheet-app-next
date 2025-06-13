@@ -34,11 +34,6 @@ export default function TimesheetList({startDate, endDate, onFilter}: TimesheetL
         {filteredEntries.length === 0 && startDate && endDate ?  
         <p className="text-gray-500 italic mt-4">No entries found in the selected date range.</p>
         : ''}
-        <ul>
-            {filteredEntries.map((filteredEntry: Entry) => (
-                <li key={filteredEntry.Id}>{filteredEntry.date}, {filteredEntry.taskDescription}, {filteredEntry.hours}</li>
-            ))}
-        </ul>
         </>
     )
 } 

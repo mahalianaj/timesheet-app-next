@@ -6,7 +6,7 @@ import { useOffDays } from "@/app/hooks/useOffDays";
 import { useEntries } from "@/app/hooks/useEntries";
 
 
-export default function TimeStats() {
+export default function DefTimeStats() {
 
   const [hours, setHours] = useState<string>('0');
   const [hoursConsumed, setHoursConsumed] = useState<string>('0');

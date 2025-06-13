@@ -49,7 +49,7 @@ export default function SideBar() {
       <ul>
       <SideBarItem text='Dashboard' Icon={MdOutlineSpaceDashboard}  route='/dashboard'/>
       <SideBarItem text='Export Timesheet' Icon={PiExportBold} route='/sendSheet'/>
-      <SideBarItem text='Time Stats' Icon={IoStatsChart } route='/'/>
+      <SideBarItem text='Time Stats' Icon={IoStatsChart } route='/timeStats'/>
       <hr className='text-cyan-800 mx-1 mb-5'/>
       {expanded ? <UserBox/> : ''}
       </ul>

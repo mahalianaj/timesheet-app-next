@@ -14,15 +14,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <SideBar />
 
           {/* Main content area */}
-          <div className="flex flex-col flex-grow">
+          {/* <div className="flex flex-col flex-grow">
             {/* Header always visible */}
-            <Navigation title="" />
+            {/* <Navigation title="" />  */}
 
             {/* Page content injected here */}
             <main className="flex-grow overflow-auto p-4 bg-stone-50">
               {children}
             </main>
-          </div>
+          {/* </div> */}
         </div>
         </QueryClientProvider>
   )
