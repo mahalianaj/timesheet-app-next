@@ -1,5 +1,5 @@
 
-export async function GET(request: Request) {
+export async function GET() {
     try {
         const res = await fetch(`${process.env.API_URL}${process.env.USERS_TABLE_ID}/records`, {
             method: 'GET',
@@ -21,7 +21,8 @@ export async function GET(request: Request) {
             headers: {'Content-Type': 'application/json'},
         });
 
-    } catch(error: any){
+    } catch (e: unknown) {
+      const error = e as Error;
         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
 }
@@ -47,8 +48,9 @@ export async function PATCH(req: Request) {
     const data = await res.json();
     return new Response(JSON.stringify(data), { status: 200 });
 
-  } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+  } catch (e: unknown) {
+      const error = e as Error;
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 }
 

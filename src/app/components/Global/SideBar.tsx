@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, createContext, useContext, ReactNode } from 'react';
+import { useState, createContext, useContext } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 
 import UserBox from '../UserBox/UserBox';
 
-import { RiArrowLeftDoubleFill, RiArrowRightDoubleFill } from 'react-icons/ri';
+import { RiArrowLeftDoubleFill } from 'react-icons/ri';
 import { IoStatsChart } from "react-icons/io5";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import {GrMenu } from 'react-icons/gr';
@@ -20,12 +20,8 @@ type SidebarContextType = {
 
 const SidebarContext = createContext<SidebarContextType>({ expanded: true });
 
-type SideBarProps = {
-  children: ReactNode;
-};
 
 export default function SideBar() { 
-    const router = useRouter();
     const [expanded, setExpanded] = useState(true);
 
   return (

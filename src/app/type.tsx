@@ -1,5 +1,5 @@
 
-type User = {
+export type User = {
   Id: number;
   consultant: string;
   customer: string;
@@ -10,7 +10,7 @@ type User = {
   role: string;
 };
 
-type Entry = {
+export type Entry = {
   Id: number;
   date: string;
   taskDescription: string;
@@ -19,8 +19,8 @@ type Entry = {
   hours: string;
 };
 
-type BurndownData = {
+export type BurndownData = {
   month: string;       
-  idealHours: number;  
+  idealHours?: number;  
   consumedHours: number;
 };

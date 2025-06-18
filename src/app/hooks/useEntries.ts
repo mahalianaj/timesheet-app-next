@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { Entry } from '../type';
 
 export const useEntries = () =>
   useQuery<Entry[]>({

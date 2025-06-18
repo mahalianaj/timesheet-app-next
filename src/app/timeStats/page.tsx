@@ -4,7 +4,7 @@ import BurndownChart from "../components/TimeStats/BurndownChart";
 import BurndownTable from "../components/TimeStats/BurndownTable";
 import DefTimeStats from "../components/TimeStats/TimeStats"
 import { useEntries } from "../hooks/useEntries";
-
+import { Entry, BurndownData } from "../type";
  
 
 export default function TimeStats() {
@@ -60,6 +60,7 @@ function aggregateHoursByMonth(entries: Entry[]): BurndownData[] {
 
   result.push({
     month: "Total",
+    idealHours: 0,
     consumedHours: totalConsumedHours,
   });
 

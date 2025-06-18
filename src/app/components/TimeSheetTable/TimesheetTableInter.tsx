@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, lazy, Suspense, useState, useMemo } from "react"
+import { useState, useMemo } from "react"
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -8,8 +8,7 @@ import {
   type MRT_ColumnDef,
   type MRT_Row,
   type MRT_TableOptions,
-  type MRT_PaginationState,
-  type MRT_SortingState,
+
 } from 'material-react-table';
 import '../../styles/login.css'
 import '../../styles/table.css'
@@ -19,9 +18,7 @@ import {
   IconButton,
   Tooltip,
   Typography,
-  Select,
   MenuItem,
-  FormHelperText,
 } from '@mui/material';
 import {
   useMutation,
@@ -30,83 +27,16 @@ import {
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEntries } from "@/app/hooks/useEntries";
-
-type EntryApiResponse = {
-  data: Array<Entry>;
-  meta: {
-    totalRowCount: number;
-  };
-};
+import { Entry } from "@/app/type";
 
 
 export default function TimesheetTable(){
-    const [filteredEntries, setFilteredEntries] = useState<Entry[]>([]);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-
-    //fetching state
-    const [isError, setIsError] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isRefetching, setIsRefetching] = useState(false);
-    const [rowCount, setRowCount] = useState(0);
-
-    //table state
-  //const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
-  //   [],
-  // );
-  //const [globalFilter, setGlobalFilter] = useState('');
-  const [sorting, setSorting] = useState<MRT_SortingState>([]);
-  const [pagination, setPagination] = useState<MRT_PaginationState>({
-    pageIndex: 0,
-    pageSize: 20,
-  });
 
     const [validationErrors, setValidationErrors] = useState<
     Record<string, string | undefined>
   >({});
     const [editedEntries, setEditedEntries] = useState<Record<string, Entry>>({});
 
-
-    useEffect(() => {
-        const fetchEntries = async () => {
-        if (!entries.length) {
-            setIsLoading(true);
-        } else {
-            setIsRefetching(true);
-        }
-
-        const url = new URL('/api/entries', location.origin);
-        url.searchParams.set(
-            'start',
-            `${pagination.pageIndex * pagination.pageSize}`,
-        );
-        url.searchParams.set('size', `${pagination.pageSize}`);
-        url.searchParams.set('filters', JSON.stringify(columnFilters ?? []));
-        url.searchParams.set('globalFilter', globalFilter ?? '');
-        url.searchParams.set('sorting', JSON.stringify(sorting ?? []));
-
-        try {
-            const response = await fetch(url.href);
-            const data = (await response.json()) as EntryApiResponse;
-            setRowCount(data.pageInfo.totalRows);
-        } catch (error) {
-            setIsError(true);
-            console.error(error);
-            return;
-        }
-        setIsError(false);
-        setIsLoading(false);
-        setIsRefetching(false);
-        };
-        fetchEntries();
-
-    }, [
-        //columnFilters, //re-fetch when column filters change
-        //globalFilter, //re-fetch when global filter changes
-        pagination.pageIndex, //re-fetch when page index changes
-        pagination.pageSize, //re-fetch when page size changes
-        //sorting, //re-fetch when sorting changes
-    ]);
 
     const columns = useMemo<MRT_ColumnDef<Entry>[]>(
     () => [
@@ -312,7 +242,7 @@ export default function TimesheetTable(){
         }),
       },
     ],
-    [editedEntries, validationErrors],
+    [validationErrors],
   );
 
   //call CREATE hook
@@ -363,7 +293,8 @@ const handleSaveEntries = async () => {
     
     setEditedEntries({});
     console.log('All entries updated successfully!');
-  } catch (error) {
+  }catch (e: unknown) {
+      const error = e as Error;
     console.error('Error updating entries:', error);
     // Optionally show user feedback here
   }
@@ -372,7 +303,7 @@ const handleSaveEntries = async () => {
   //DELETE action
   const openDeleteConfirmModal = (row: MRT_Row<Entry>) => {
     if (window.confirm('Are you sure you want to delete this entry?')) {
-      deleteEntry(row.original.Id);
+      deleteEntry(String(row.original.Id));
     }
   };
 
@@ -460,7 +391,7 @@ function useCreateEntry() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (entry: Entry) => {
-      const res = await fetch('/api/entries', {
+     await fetch('/api/entries', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
@@ -471,9 +402,9 @@ function useCreateEntry() {
     
     //client side optimistic update
     onMutate: (newEntryInfo: Entry) => {
-      queryClient.setQueryData(
+      queryClient.setQueryData<Entry[]>(
         ['entries'],
-        (prevEntries: any) =>
+        (prevEntries = [] ) =>
           [
             ...prevEntries,
             {
@@ -487,21 +418,6 @@ function useCreateEntry() {
   });
 }
 
-// //READ hook (get entries from api)
-// function useGetEntries() {
-//   return useQuery<Entry[]>({
-//     queryKey: ['entries'],
-//     queryFn: async () => {
-//     const response = await fetch('/api/entries');
-//       if (!response.ok) {
-//         throw new Error('Failed to fetch entries');
-//       }
-//       const data = await response.json();
-//       return data.list; 
-//     },
-//     refetchOnWindowFocus: false,
-//   });
-// }
 
 //UPDATE hook (put entry in api)
 function useUpdateEntry() {
@@ -523,7 +439,7 @@ function useUpdateEntry() {
     },
     //client side optimistic update
     onMutate: (newEntryInfo: Entry) => {
-      queryClient.setQueryData(['entries'], (prevEntries: any) =>
+      queryClient.setQueryData<Entry[]>(['entries'], (prevEntries) =>
         prevEntries?.map((prevEntry: Entry) =>
           prevEntry.Id === newEntryInfo.Id ? newEntryInfo : prevEntry,
         ),
@@ -555,8 +471,8 @@ function useDeleteEntry() {
       return res.json();
     },
     onMutate: (entryId: string) => {
-      queryClient.setQueryData(['entries'], (prev: any) =>
-        prev?.filter((entry: Entry) => entry.Id !== entryId)
+      queryClient.setQueryData(['entries'], (prev: Entry[] | undefined) =>
+        prev?.filter((entry: Entry) => entry.Id !== Number(entryId))
       );
     },
     onSettled: () => {

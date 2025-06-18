@@ -1,7 +1,5 @@
 'use client';
 
-import { FaClock } from 'react-icons/fa';
-
 type BurndownRow = {
   month: string;
   idealHours?: number;
@@ -15,7 +13,7 @@ export default function BurndownTable({ data }: { data: BurndownRow[] }) {
         Monthly Burndown Summary
       </div>
       <table className="min-w-full text-left text-cove-800">
-        <thead className="bg-oasis-50 text-cove-900 ">
+        <thead className="bg-cove-200 text-cove-900 ">
           <tr>
             <th className="px-6 py-3 text-sm font-bold">Month</th>
             <th className="px-6 py-3 text-sm font-bold text-right">Ideal Hours</th>

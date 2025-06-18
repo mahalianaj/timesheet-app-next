@@ -1,16 +1,23 @@
 'use client'
 
-import { useState, useEffect } from "react"
-import TimesheetTable from "../components/TimeSheetTable/TimesheetTableInter";
-import { useEntries } from "../hooks/useEntries";
+import { useState } from "react"
 import { useUsers } from "../hooks/useUsers";
 import Navigation from "../components/Global/NavBar";
 import TimesheetList from "../components/TimeSheetTable/TimeSheetList";
 import { MdOutlineFileDownload } from "react-icons/md";
+import { Entry, User } from "../type";
 
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+
+
+interface jsPDFWithAutoTable extends jsPDF {
+  lastAutoTable?: {
+    finalY: number;
+    [key: string]: unknown;
+  };
+}
 
 
 export default function SendSheet(){
@@ -31,8 +38,9 @@ export default function SendSheet(){
 
   function centerText(text: string, y: number, fontSize = 14, isBold = false) {
     doc.setFontSize(fontSize);
-    if (isBold) doc.setFont(undefined, "bold");
-    else doc.setFont(undefined, "normal");
+    const fontName = "helvetica";
+    if (isBold) doc.setFont(fontName, "bold");
+    else doc.setFont(fontName, "normal");
     const pageWidth = doc.internal.pageSize.getWidth();
     const textWidth = doc.getTextWidth(text);
     const x = (pageWidth - textWidth) / 2;
@@ -74,7 +82,7 @@ export default function SendSheet(){
     showHead: 'never',
   });
 
-  const afterUserTableY = (doc as any).lastAutoTable.finalY + 10;
+  const afterUserTableY = ((doc as jsPDFWithAutoTable).lastAutoTable?.finalY ?? 0 )+ 10;
 
 
   centerText('Summary of the work fot the reporting period.', afterUserTableY, 12, false);
@@ -115,7 +123,7 @@ export default function SendSheet(){
   });
 
   // Signature section
-  const finalY = (doc as any).lastAutoTable.finalY || 80;
+  const finalY = ((doc as jsPDFWithAutoTable).lastAutoTable?.finalY ?? 0 ) || 80;
   doc.setFontSize(11);
   doc.text("Signature: ___________________________", 14, finalY + 20);
   doc.text("Date: ___________________________", 14, finalY + 30);

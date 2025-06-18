@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useEntries } from '../../hooks/useEntries';
+import { Entry } from '@/app/type';
 
 type TimesheetListProps = {
     startDate: string;
@@ -24,7 +25,7 @@ export default function TimesheetList({startDate, endDate, onFilter}: TimesheetL
       else {
         onFilter(filteredEntries);
       }
-    }, [startDate, endDate, entries]);
+    }, [startDate, endDate, entries, filteredEntries, onFilter]);
 
     return (
         <>

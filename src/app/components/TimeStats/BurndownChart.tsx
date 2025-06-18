@@ -1,7 +1,6 @@
 'use client';
 
 import { LineChart } from '@mui/x-charts';
-import { Card, CardContent, Typography } from '@mui/material';
 
 type BurndownRow = {
   month: string;
@@ -18,7 +17,7 @@ export default function BurndownChart({ data }: { data: BurndownRow[] }) {
   const consumed = filteredData.map(row => row.consumedHours);
 
   return (
-    <div className="mt-8 w-full lg:w-5/6 mx-auto g-white rounded-3xl shadow-md border border-gray-200 overflow-hidden">
+    <div className="mt-8 w-full lg:w-5/6 mx-auto g-white rounded-3xl shadow-md border bg-cove-50 border-gray-200 overflow-hidden">
     <div className="bg-cove-800 text-white text-lg font-semibold mb-5 px-6 py-4">Burndown Chart</div>
     <LineChart 
         xAxis={[{ data: months, scaleType: 'band', label: 'Month' }]}

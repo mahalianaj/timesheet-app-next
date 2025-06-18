@@ -3,12 +3,13 @@ import { MdPerson, MdBusiness } from "react-icons/md";
 import { FaCalendar, FaFileContract, FaBuilding } from "react-icons/fa";
 
 import { useUsers } from "@/app/hooks/useUsers";
+import {User} from "../../type";
 
 export default function UserBox() {
 
   const {data: users = []} = useUsers();
   if (!users || users.length === 0) {
-    return <div>Loading user info...</div>
+    return <div className="text-cove-50">Loading user info...</div>
   }
 
   const user: User = users[0]

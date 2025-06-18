@@ -22,6 +22,23 @@ export default function DefTimeStats() {
       return;
     };
 
+      function totalHoursToWork(startDate: string, endDate: string) {
+    const averageWorkDay = 8;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    let workingDays = 0;
+    const offDaysSet = new Set(offDays);
+
+    const current = new Date(start);
+    while (current <= end) {
+      const dateStr = current.toISOString().split('T')[0];
+      if (!offDaysSet.has(dateStr)) workingDays++;
+      current.setDate(current.getDate() + 1);
+    }
+
+    return workingDays * averageWorkDay;
+  }
+
     const totalHours = totalHoursToWork(user.start_period, user.end_period);
     const totalHoursConsumed = entries.reduce((sum, row) => sum + Number(row.hours), 0);
     const totalHoursLeft = totalHours - totalHoursConsumed;
@@ -65,27 +82,11 @@ export default function DefTimeStats() {
     }
 
     updateUserProfile();
-  }, [entries, offDays, user]);
+  }, [entries, offDays, user, hours, hoursConsumed, hoursLeft]);
 
-  function totalHoursToWork(startDate: string, endDate: string) {
-    const averageWorkDay = 8;
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    let workingDays = 0;
-    const offDaysSet = new Set(offDays);
-
-    let current = new Date(start);
-    while (current <= end) {
-      const dateStr = current.toISOString().split('T')[0];
-      if (!offDaysSet.has(dateStr)) workingDays++;
-      current.setDate(current.getDate() + 1);
-    }
-
-    return workingDays * averageWorkDay;
-  }
 
   if (!users || users.length === 0) {
-    return <div>Loading user info...</div>;
+    return <div className="text-cove-500 w-full flex justify-center items-center">Loading user info...</div>;
   }
 
   return (

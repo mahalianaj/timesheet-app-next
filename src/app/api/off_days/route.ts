@@ -1,4 +1,4 @@
-export async function GET(request: Request) {
+export async function GET() {
     try {
         const res = await fetch(`${process.env.API_URL}${process.env.OFF_DAYS_TABLE_ID}/records`, {
             method: 'GET',
@@ -21,7 +21,8 @@ export async function GET(request: Request) {
             headers: {'Content-Type': 'application/json'},
         });
 
-    } catch(error){
+    } catch (e: unknown) {
+      const error = e as Error;
         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
 }
