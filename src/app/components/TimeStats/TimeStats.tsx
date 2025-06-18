@@ -93,35 +93,35 @@ export default function DefTimeStats() {
     <div className="flex flex-row  gap-3">
 
         {/* Hours Consumed */}
-        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-white">
-            <div className="bg-oasis-50 p-3 rounded-full">
-            <FaClock className="text-cove-600 text-2xl" />
+        <div className="flex items-center gap-4 p-4 py-auto bg-custom-100 rounded-xl shadow-md border border-custom-100">
+            <div className="bg-linear-110 from-malachite-500 to-ntb-800 p-3 rounded-full">
+            <FaClock className="text-cove-50 text-2xl" />
             </div>
             <div>
-            <label className="text-gray-500">Hours Consumed</label>
-            <div className="text-cove-500 text-3xl font-bold">{hoursConsumed}</div>
+            <label className="text-custom-500">Hours Consumed</label>
+            <div className="text-ntb-100 text-3xl font-bold">{hoursConsumed}</div>
             </div>
         </div>
 
         {/* Hours Left */}
-        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-white">
-            <div className="bg-oasis-50 p-3 rounded-full">
-            <FaHourglassHalf className="text-cove-600 text-2xl" />
+        <div className="flex items-center gap-4 p-4 py-auto bg-custom-100 rounded-xl shadow-md border border-custom-100">
+            <div className="bg-linear-20 from-malachite-500 to-ntb-800 p-3 rounded-full">
+            <FaHourglassHalf className="text-cove-50 text-2xl" />
             </div>
             <div>
-            <label className="text-gray-500">Hours Left</label>
-            <div className="text-cove-500 text-3xl font-bold">{hoursLeft}</div>
+            <label className="text-custom-500">Hours Left</label>
+            <div className="text-ntb-100 text-3xl font-bold">{hoursLeft}</div>
             </div>
         </div>
 
         {/* Total Hours */}
-        <div className="flex items-center gap-4 p-4 py-auto bg-white rounded-xl shadow-md border border-white">
-            <div className="bg-oasis-50 p-3 rounded-full">
-            <FaRegCalendarCheck className="text-cove-600 text-2xl" />
+        <div className="flex items-center gap-4 p-4 py-auto bg-custom-100 rounded-xl shadow-md border border-custom-100">
+            <div className="bg-linear-45 from-malachite-500 to-ntb-800 p-3 rounded-full">
+            <FaRegCalendarCheck className="text-cove-50 text-2xl" />
             </div>
             <div>
-            <label className="text-gray-500">Total Hours</label>
-            <div className="text-cove-500 text-3xl font-bold">{hours}</div>
+            <label className="text-custom-500">Total Hours</label>
+            <div className="text-ntb-100 text-3xl font-bold">{hours}</div>
             </div>
         </div>
     </div>

@@ -8,14 +8,14 @@ type BurndownRow = {
 
 export default function BurndownTable({ data }: { data: BurndownRow[] }) {
   return (
-    <div className="mt-8 bg-white rounded-3xl shadow-md border w-full lg:w-5/6 border-gray-200 overflow-hidden">
-      <div className="bg-cove-800 text-white text-lg font-semibold px-6 py-4">
+    <div className="mt-8 bg-white rounded-3xl shadow-md border w-full lg:w-5/6 border-custom-100 overflow-hidden">
+      <div className="bg-custom-100 text-white text-lg font-semibold px-6 py-4">
         Monthly Burndown Summary
       </div>
-      <table className="min-w-full text-left text-cove-800">
-        <thead className="bg-cove-200 text-cove-900 ">
+      <table className="min-w-full text-left text-custom-100 ">
+        <thead className="bg-custom-300 text-cove-50 ">
           <tr>
-            <th className="px-6 py-3 text-sm font-bold">Month</th>
+            <th className="px-6 py-3 text-sm font-bold ">Month</th>
             <th className="px-6 py-3 text-sm font-bold text-right">Ideal Hours</th>
             <th className="px-6 py-3 text-sm font-bold text-right">Hours Consumed</th>
             <th className="px-6 py-3 text-sm font-bold text-right">Hours Left</th>
@@ -30,11 +30,11 @@ export default function BurndownTable({ data }: { data: BurndownRow[] }) {
             return (
               <tr
                 key={month}
-                className={`${isTotal ? 'bg-cove-100 text-cove-900 font-semibold' : 'even:bg-gray-50'}`}
+                className={`${isTotal ? 'bg-custom-100 text-cove-50 font-semibold' : 'even:bg-gray-300 odd:bg-gray-400'}`}
               >
                 <td className="px-6 py-4">{month}</td>
                 <td className="px-6 py-4 text-right">
-                  {idealHours !== undefined ? idealHours : ''}
+                  {idealHours !== 0  ? idealHours : ''}
                 </td>
                 <td className="px-6 py-4 text-right">
                   {consumedHours.toFixed(1)}

@@ -153,9 +153,9 @@ export default function SendSheet(){
   <>
     <Navigation title="Export Timesheet" />
 
-    <div className="p-6">
+    <div className="p-6 bg-custom-100 rounded-2xl">
       {!startDate || !endDate ? (
-        <p className="text-gray-500 italic mb-4">
+        <p className="text-cove-50 italic mb-4">
           Please select both start and end dates to filter entries.
         </p>
       ) : null}
@@ -164,25 +164,25 @@ export default function SendSheet(){
       <div className="flex flex-col lg:flex-row gap-8 w-full">
         {/* Left column */}
         <div className="flex flex-col space-y-4 w-full lg:w-1/3">
-          <label className="font-medium">
+          <label className="font-medium text-cove-50">
             Enter start date <br />
             <input
               type="date"
               value={startDate}
               required
               onChange={(e) => setStartDate(e.target.value)}
-              className="mt-1 block w-full border border-cove-500 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-oasis-50"
+              className="mt-1 bg-custom-300 text-cove-50 block w-full border border-custom-500 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-oasis-50"
             />
           </label>
 
-          <label className="font-medium">
+          <label className="font-medium text-cove-50">
             Enter end date <br />
             <input
               type="date"
               value={endDate}
               required
               onChange={(e) => setEndDate(e.target.value)}
-              className="mt-1 block w-full border border-cove-500 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-oasis-50"
+              className="mt-1 bg-custom-300 text-cove-50 block w-full border border-custom-500 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-oasis-50"
             />
           </label>
 

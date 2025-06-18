@@ -337,6 +337,7 @@ const table = useMaterialReactTable({
         minHeight: '50px',
       },
     },
+  
     onCreatingRowCancel: () => setValidationErrors({}),
     onCreatingRowSave: handleCreateEntry,
     renderRowActions: ({ row }) => (
@@ -351,7 +352,7 @@ const table = useMaterialReactTable({
     renderBottomToolbarCustomActions: () => (
       <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center'}}>
         <button
-          className="text-cove-50 bg-cove-600 rounded p-1 px-3 ml-3 hover:bg-cove-700 transition-all"
+          className="text-cove-50 bg-custom-300 rounded p-1 px-3 ml-3 hover:bg-cove-700 transition-all"
           color="success"
           onClick={handleSaveEntries}
           disabled={
@@ -368,7 +369,7 @@ const table = useMaterialReactTable({
     ),
     renderTopToolbarCustomActions: ({ table }) => (
       <button
-        className="text-cove-50 bg-cove-600 rounded p-2 px-3 mt-1 ml-3 hover:bg-cove-700"
+        className="text-cove-50 bg-custom-300 rounded p-2 px-3 mt-1 ml-3 hover:bg-cove-700"
         onClick={() => {
           table.setCreatingRow(true); 
         }}

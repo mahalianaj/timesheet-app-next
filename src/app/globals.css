@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -39,7 +38,25 @@
 --color-oasis-900: #763a18;
 --color-oasis-950: #401c0a;
 
+--color-custom-100: #0D1321;
+--color-custom-200: #2D3142;
+--color-custom-300: #4A5568;
+--color-custom-400: #7C8595;
+--color-custom-500: #A3ABBA;
 
+--color-ntb-50: #e9fbff;
+--color-ntb-100: #cef5ff;
+--color-ntb-200: #a7efff;
+--color-ntb-300: #6beaff;
+--color-ntb-400: #26d8ff;
+--color-ntb-500: #00b4ff;
+--color-ntb-600: #008aff;
+--color-ntb-700: #006fff;
+--color-ntb-800: #005fe6;
+--color-ntb-900: #0055b3;
+--color-ntb-950: #004286;
+
+--color-malachite-500: #34c917;
 
 }
 
