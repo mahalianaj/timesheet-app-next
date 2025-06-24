@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -28,6 +28,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEntries } from "@/app/hooks/useEntries";
 import { Entry } from "@/app/type";
+import { useNavigationGuard } from "@/app/hooks/NavigationGuardContext";
 
 
 export default function TimesheetTable(){
@@ -37,6 +38,30 @@ export default function TimesheetTable(){
   >({});
     const [editedEntries, setEditedEntries] = useState<Record<string, Entry>>({});
 
+    const hasUnsavedChanges =
+    Object.keys(editedEntries).length > 0 ||
+    Object.values(validationErrors).some((error) => !!error);
+
+    const { setHasUnsavedChanges } = useNavigationGuard();
+
+  // Warn before unload (refresh/close tab/navigation)
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasUnsavedChanges]);
+
+  useEffect(() => {
+  setHasUnsavedChanges(
+    Object.keys(editedEntries).length > 0 ||
+    Object.values(validationErrors).some(Boolean)
+  );
+}, [editedEntries, validationErrors]);
 
     const columns = useMemo<MRT_ColumnDef<Entry>[]>(
     () => [
@@ -44,6 +69,16 @@ export default function TimesheetTable(){
         accessorKey: 'date',
         header: 'Date',
         size: 110,
+        sx: {
+          backgroundColor: '#1e1e1e',
+          color: '#ccc',
+          '& input': {
+            color: '#ccc',
+          },
+          '& .MuiSvgIcon-root': {
+            color: '#ccc', // calendar icon color
+          },
+        },
         muiEditTextFieldProps: ({ cell, row }) => ({
           type: 'date',
           required: true,
@@ -308,6 +343,121 @@ const handleSaveEntries = async () => {
   };
 
 const table = useMaterialReactTable({
+muiTablePaperProps: {
+  sx: {
+    backgroundColor: '#0D1321',
+  },
+},
+muiTopToolbarProps: {
+  sx: {
+    backgroundColor: '#0D1321',
+    color: '#ccc',
+    '& .MuiTypography-root': {
+      color: '#ccc',
+    },
+    '& .MuiSvgIcon-root': {
+      color: '#ccc',
+    },
+  },
+},
+muiBottomToolbarProps: {
+  sx: {
+    backgroundColor: '#0D1321',
+    color: '#ccc',
+    '& .MuiTypography-root': {
+      color: '#ccc',
+    },
+    '& .MuiSvgIcon-root': {
+      color: '#ccc',
+    },
+    '& .MuiFormLabel-root': {
+      color: '#ccc',
+    },
+    '*': {
+      color: '#ccc !important', // deeply apply color to all children
+      fill: '#ccc !important',  // ensure icons also respect it
+    },
+    '& input': {
+      color: '#ccc',
+      backgroundColor: '#ccc',
+    },
+  },
+},
+muiTableHeadProps: {
+  sx: {
+    backgroundColor: '#0D1321',
+    color: '#ccc !important',
+    borderColor: '#333',
+    '& .MuiTypography-root': {
+      color: '#f4f7fa',
+    },
+    '& .MuiSvgIcon-root': {
+      color: '#f4f7fa',
+    },
+    '*': {
+      color: '#f4f7fa !important', // deeply apply color to all children
+      fill: '#f4f7fa !important',  // ensure icons also respect it
+    },
+  },
+},
+muiTableHeadCellProps: {
+  sx: {
+    backgroundColor: '#0D1321',
+    borderColor: '#333',
+    '& .MuiTypography-root': {
+      color: '#f4f7fa',
+    },
+    '& .MuiSvgIcon-root': {
+      color: '#f4f7fa',
+    },
+    '*': {
+      color: '#f4f7fa !important', // deeply apply color to all children
+      fill: '#f4f7fa !important',  // ensure icons also respect it
+    },
+
+  },
+},
+muiTableBodyCellProps: {
+  sx: {
+    backgroundColor: '#0D1321',
+    color: '#ccc !important',
+    borderColor: '#333',
+    '& .MuiTypography-root': {
+      color: '#f4f7fa',
+    },
+    '& .MuiSvgIcon-root': {
+      color: '#f4f7fa',
+    },
+      '& .MuiTableCell-root': {
+      color: '#f4f7fa',
+    },
+    '*': {
+      color: '#f4f7fa !important', // deeply apply color to all children
+      fill: '#f4f7fa !important',  // ensure icons also respect it
+    },
+  },
+},
+muiTableBodyRowProps: {
+  sx: {
+    backgroundColor: '#1e1e1e',
+    color: '#f4f7fa !important',
+    borderColor: '#333',
+    '& .MuiTypography-root': {
+      color: '#f4f7fa',
+    },
+    '& .MuiSvgIcon-root': {
+      color: '#f4f7fa',
+    },
+     '&:hover': {
+      backgroundColor: '#2a2a2a', // hover color
+    },
+    '*': {
+      color: '#f4f7fa !important', // deeply apply color to all children
+      fill: '#f4f7fa !important',  // ensure icons also respect it
+    },
+  },
+},
+
     columns,
     data: entries,
     createDisplayMode: 'row', // ('modal', and 'custom' are also available)
@@ -352,7 +502,7 @@ const table = useMaterialReactTable({
     renderBottomToolbarCustomActions: () => (
       <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center'}}>
         <button
-          className="text-cove-50 bg-custom-300 rounded p-1 px-3 ml-3 hover:bg-cove-700 transition-all"
+        className="text-cove-50 bg-custom-300 rounded p-2 px-3 mt-1 ml-3 hover:text-white hover:bg-linear-40 from-malachite-500 to-ntb-800 "
           color="success"
           onClick={handleSaveEntries}
           disabled={
@@ -368,14 +518,32 @@ const table = useMaterialReactTable({
       </Box>
     ),
     renderTopToolbarCustomActions: ({ table }) => (
+      <div className=" flex">
       <button
-        className="text-cove-50 bg-custom-300 rounded p-2 px-3 mt-1 ml-3 hover:bg-cove-700"
+        className="text-cove-50 bg-custom-300 rounded p-2 px-3 mt-1 ml-3 hover:text-white hover:bg-linear-40 from-malachite-500 to-ntb-800 "
         onClick={() => {
           table.setCreatingRow(true); 
         }}
       >
         Create New Entry
       </button>
+      <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center'}}>
+        <button
+        className="text-cove-50 bg-custom-300 rounded p-2 px-3 mt-1 ml-3 hover:text-white hover:bg-linear-40 from-malachite-500 to-ntb-800 "
+          color="success"
+          onClick={handleSaveEntries}
+          disabled={
+            Object.keys(editedEntries).length === 0 ||
+            Object.values(validationErrors).some((error) => !!error)
+          }
+        >
+          {isUpdatingEntries ? <CircularProgress size={25} /> : 'Save'}
+        </button>
+        {Object.values(validationErrors).some((error) => !!error) && (
+          <Typography color="error">Fix errors before submitting</Typography>
+        )}
+      </Box>
+      </div>
     ),
     state: {
       isLoading: isLoadingEntries,

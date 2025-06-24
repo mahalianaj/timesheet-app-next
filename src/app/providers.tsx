@@ -3,11 +3,13 @@
 import {useState} from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SideBar from './components/Global/SideBar';
+import { NavigationGuardProvider } from './hooks/NavigationGuardContext';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
   return (
     <QueryClientProvider client={queryClient}>
+      <NavigationGuardProvider>
           <div className="flex h-screen">
           {/* Sidebar always visible */}
           <SideBar />
@@ -23,6 +25,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             </main>
           {/* </div> */}
         </div>
+        </NavigationGuardProvider>
         </QueryClientProvider>
   )
 }

@@ -13,6 +13,8 @@ import { PiExportBold } from "react-icons/pi";
 import { useRouter } from 'next/navigation';
 import { IconType } from 'react-icons/lib';
 
+import { useNavigationGuard } from '@/app/hooks/NavigationGuardContext';
+
 
 type SidebarContextType = {
   expanded: boolean;
@@ -65,10 +67,21 @@ type SideBarItemProps = {
 function SideBarItem({ Icon, text, route }: SideBarItemProps) {
   const { expanded } = useContext(SidebarContext);
   const router = useRouter();
+  const { hasUnsavedChanges } = useNavigationGuard();
+
+    const handleNavigation = () => {
+    if (hasUnsavedChanges) {
+      const confirmLeave = window.confirm("You have unsaved changes. Are you sure you want to leave?");
+      if (!confirmLeave) return;
+    }
+
+    router.push(route);
+  };
+
 
   return (
     <Tooltip title={text} placement='right'>
-    <li onClick={() => router.push(route)} 
+    <li onClick={handleNavigation} 
           className={`flex items-center cursor-pointer rounded-md hover:bg-linear-55 from-malachite-500 to-ntb-800 hover:text-white 
           ${expanded ? 'mx-2 mb-2' : 'm-3' }`}>
           <span className={` ${expanded ? 'gap-3 m-3 ' : 'justify-center m-2' } w-full items-center flex cursor-pointer  text-cove-50 rounded-md  hover:text-white`}>

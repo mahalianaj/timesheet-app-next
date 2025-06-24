@@ -72,3 +72,7 @@ body {
   color: var(--foreground);
   @apply font-sans;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
