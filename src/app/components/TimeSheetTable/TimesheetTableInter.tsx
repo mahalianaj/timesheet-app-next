@@ -10,8 +10,7 @@ import {
   type MRT_TableOptions,
 
 } from 'material-react-table';
-import '../../styles/login.css'
-import '../../styles/table.css'
+
 import {
   Box,
   CircularProgress,
