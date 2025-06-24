@@ -25,7 +25,7 @@ export default function TimesheetList({startDate, endDate, onFilter}: TimesheetL
       else {
         onFilter(filteredEntries);
       }
-    }, [startDate, endDate, entries, filteredEntries, onFilter]);
+    }, [startDate, endDate, entries]);
 
     return (
         <>

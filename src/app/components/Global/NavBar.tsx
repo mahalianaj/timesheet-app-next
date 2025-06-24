@@ -9,7 +9,7 @@ export default function Navigation({title}: NavigationProps) {
   const dateString = today.toDateString();
 
   return (
-    <nav className="  flex  justify-between items-center px-3 pb-5">
+    <nav className="sticky top-0 z-10 flex bg-custom-200 justify-between items-center px-full pt-5 pb-4">
         <span className="text-xl font-extrabold flex justify-start tracking-wide text-cove-100 drop-shadow-[0_1.5px_1.2px_rgba(0,0,0,0.8)] ">
           {title}
         </span>

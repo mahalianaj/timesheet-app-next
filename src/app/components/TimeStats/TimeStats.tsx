@@ -22,7 +22,7 @@ export default function DefTimeStats() {
       return;
     };
 
-      function totalHoursToWork(startDate: string, endDate: string) {
+    function totalHoursToWork(startDate: string, endDate: string) {
     const averageWorkDay = 8;
     const start = new Date(startDate);
     const end = new Date(endDate);

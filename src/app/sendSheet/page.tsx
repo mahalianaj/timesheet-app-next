@@ -130,15 +130,13 @@ export default function SendSheet(){
 
   const fullName = user.consultant || "Unnamed";
     const [firstName, lastName] = fullName.trim().split(" ");
-    const namePart = `${firstName}-${lastName || ""}`; // handles missing last name
+    const namePart = lastName ? `${firstName}-${lastName || ""}` : firstName; 
 
     const start = new Date(startDate);
     const month = start.toLocaleString('default', { month: 'long' });
     const year = start.getFullYear();
 
     const fileName = `${namePart}-${month}-${year}-ActivityReport.pdf`;
-
-
 
     // Save and render
     const pdfBlob = doc.output("blob");
@@ -148,6 +146,7 @@ export default function SendSheet(){
 
     };
 
+    const isDisabled = !startDate || !endDate || !filtered || filtered.length === 0;
 
     return (
   <>
@@ -194,18 +193,20 @@ export default function SendSheet(){
           
         <button
             onClick={() => generatePDF(filtered!, startDate, endDate, user)}
-            disabled={!startDate || !endDate || !filtered || filtered.length === 0}
-            className={`bg-cove-500 text-white rounded-md py-2 px-4 hover:bg-cove-700 transition cursor-pointer
+            disabled={isDisabled}
+            title={isDisabled ? "Please select time period" : "Generate PDF"}
+            className={`bg-ntb-800 text-white rounded-md py-2 px-4 hover:bg-ntb-700 transition cursor-pointer
                 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400`}
             >
             Generate PDF preview
         </button>
 
         <a
-            href={pdfUrl || '#'}
+            href={pdfUrl || undefined}
             download={pdfFileName}
-            className={`flex items-center justify-center bg-cove-500 gap-2 text-center text-white rounded-md py-2 px-4 hover:bg-cove-700 transition
-                ${!pdfUrl ? 'pointer-events-none bg-gray-400 cursor-not-allowed hover:bg-gray-400' : ''}`}
+            title={pdfUrl ? "Download PDF" : "Please generate PDF first"}
+            className={`flex items-center justify-center  gap-2 text-center text-white rounded-md py-2 px-4 
+                ${!pdfUrl ? 'bg-gray-400 cursor-not-allowed hover:bg-gray-400' : 'bg-ntb-800 hover:bg-ntb-700 transition'}`}
             >
                 <MdOutlineFileDownload className="text-xl" />
             <span>Download PDF</span>

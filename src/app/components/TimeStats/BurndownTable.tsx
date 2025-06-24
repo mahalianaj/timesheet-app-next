@@ -13,7 +13,7 @@ export default function BurndownTable({ data }: { data: BurndownRow[] }) {
         Monthly Burndown Summary
       </div>
       <table className="min-w-full text-left text-custom-100 ">
-        <thead className="bg-custom-300 text-cove-50 ">
+        <thead className="bg-custom-400 text-cove-50 ">
           <tr>
             <th className="px-6 py-3 text-sm font-bold ">Month</th>
             <th className="px-6 py-3 text-sm font-bold text-right">Ideal Hours</th>
@@ -30,7 +30,7 @@ export default function BurndownTable({ data }: { data: BurndownRow[] }) {
             return (
               <tr
                 key={month}
-                className={`${isTotal ? 'bg-custom-100 text-cove-50 font-semibold' : 'even:bg-gray-300 odd:bg-gray-400'}`}
+                className={`${isTotal ? 'bg-custom-100 text-cove-50 font-semibold' : 'bg-gray-300 '}`}
               >
                 <td className="px-6 py-4">{month}</td>
                 <td className="px-6 py-4 text-right">

@@ -4,7 +4,7 @@ import LoginForm from "./components/auth/LoginForm"
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 // import { Metadata } from "next"
-// import { redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 
 // export const metadata: Metadata = {
@@ -39,10 +39,6 @@ const darkTheme = createTheme({
 });
 
 export default function App(){
-  return (
-    <LoginForm/>
-
-  )
-  // redirect('/dashboard');
+  redirect('/dashboard');
 }
 
