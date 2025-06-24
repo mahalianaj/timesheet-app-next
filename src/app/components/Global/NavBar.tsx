@@ -14,7 +14,7 @@ export default function Navigation({title}: NavigationProps) {
           {title}
         </span>
         <div className=" items-center justify-end align-">
-        <div className="flex items-center space-x-2 bg-custom-100 text-custom-500 rounded-lg px-4 py-2 font-semibold font-sans select-none">
+        <div className="flex items-center space-x-2 bg-custom-100 text-cove-50 rounded-lg px-4 py-2 font-semibold font-sans select-none">
           <FaRegCalendarAlt className="text-lg" />
           <span>Today is {dateString}</span>
         </div>
