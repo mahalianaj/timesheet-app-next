@@ -67,17 +67,7 @@ export default function TimesheetTable(){
       {
         accessorKey: 'date',
         header: 'Date',
-        size: 110,
-        sx: {
-          backgroundColor: '#1e1e1e',
-          color: '#ccc',
-          '& input': {
-            color: '#ccc',
-          },
-          '& .MuiSvgIcon-root': {
-            color: '#ccc', // calendar icon color
-          },
-        },
+        maxSize: 70,
         muiEditTextFieldProps: ({ cell, row }) => ({
           type: 'date',
           required: true,
@@ -242,6 +232,7 @@ export default function TimesheetTable(){
         muiEditTextFieldProps: ({ cell, row }) => ({
           type: 'number',
           required: true,
+          className: 'text-right',
           sx:{textAlign: "right"},
           error: !!validationErrors?.[cell.id],
           helperText: validationErrors?.[cell.id],
